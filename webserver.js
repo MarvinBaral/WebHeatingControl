@@ -2,22 +2,48 @@
 
 //webserver to control a heating
 
+//global constants
+//====================================================
+
 const express = require('express');
 const app = express();
 const http = require('http');
-//const https = require('https');
 const bodyParser = require('body-parser');
 const fs = require('fs'); //file-system
-const exec = require('child_process').exec;
+//const exec = require('child_process').exec;
 const rootDir = '/root/heating/'
 const fileHeader = rootDir + 'header.html';
 const fileFooter = rootDir + 'footer.html';
 const fileIndex = rootDir + 'index.html';
+const fileLED = '/sys/class/leds/led0/brightness'; //for RaspberryPi
 const assemblePage = function (fileToEmbed) {
 	var content = fs.readFileSync(fileHeader, 'utf-8') + fs.readFileSync(fileToEmbed, 'utf-8') + fs.readFileSync(fileFooter, 'utf-8');
 	return content;
 };
+const toggleLED = function() {
+	statusLED = 1 - statusLED;	
+	fs.writeFileSync(fileLED, statusLED);
+};
 
+//global variables
+//====================================================
+
+var statusLED = 0;
+
+//the temperature regulation
+//====================================================
+
+var main = function () {
+	/* example code
+	if (temp >= targetTemp) {
+		//burner off
+	} else {
+		//burner on
+	}
+	*/
+	toggleLED(); //to visualize activity (like heartbeat, but only for this application)
+};
+setInterval(main, 1000);
 
 //the normal webserver stuff
 //====================================================
@@ -27,13 +53,13 @@ const assemblePage = function (fileToEmbed) {
 app.get('/', function (req, res) {
 	res.contentType('text/html');
 	res.send(assemblePage(fileIndex));
-})
+});
 
 app.get('/*.css', function (req, res) {
 	res.contentType('text/css');
 	var filename = req.path;
 	res.sendFile(rootDir + filename);
-})
+});
 
 http.createServer(app).listen(80);
 
