@@ -1,13 +1,7 @@
-.rot90 {
-	transform: rotate(90deg);
-}
+//inspired from http://a.singlediv.com/
 
 .rot180 {
 	transform: rotate(180deg);
-}
-
-.rot270 {
-	transform: rotate(270deg);
 }
 
 .test {
@@ -18,11 +12,26 @@
 //	background-image: radial-gradient(circle, red 0%, yellow 100%);
 }
 
-.pipe {
+.pipe-horizontal {
 	height: 5px;
 	width: 100px;
 	border-top: 1px solid black;
 	border-bottom: 1px solid black;
-	background-image: linear-gradient(180deg, #c0c0c0 0%, #707070 100%);
+	background-image: linear-gradient(to bottom, #c0c0c0, #707070);
 }
 
+.pipe-vertical {
+	height: 100px;
+	width: 5px;
+	border-left: 1px solid black;
+	border-right: 1px solid black;
+	background-image: linear-gradient(to right, #c0c0c0, #707070); 
+}
+
+.pump {
+	height: 40px;
+	width: 40px;
+	background-color: red;
+	border-radius: 30%;
+	border: 1px solid black;
+}
