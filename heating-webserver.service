@@ -1,0 +1,9 @@
+[Unit]
+Description = Webserver to control heating
+
+[Service]
+ExecStart = /root/heating/webserver.js
+Restart = always
+
+[Install]
+WantedBy = multi-user.target
