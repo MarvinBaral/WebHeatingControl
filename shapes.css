@@ -1,6 +1,28 @@
-#test div{
+.rot90 {
+	transform: rotate 90deg;
+}
+
+.rot180 {
+	transform: rotate 180deg;
+}
+
+.rot270 {
+	transform: rotate 270deg;
+}
+
+.test {
 	height: 100px;
 	width: 100px;
 	border: 2px solid black;
-	background-image: linear-gradient(to right, red 0%, yellow 100%);
+//	background-image: linear-gradient(to right, red 0%, yellow 100%);
+	background-image: radial-gradient(circle 10px, red 0%, yellow 100%);
 }
+
+.pipe {
+	height: 5px;
+	width: 100px;
+	border-top: 1px solid black;
+	border-bottom: 1px solid black;
+	background-image: linear-gradient(180deg, #c0c0c0 0%, #707070 100%);
+}
+

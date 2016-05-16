@@ -5,3 +5,8 @@ body {
 h1 {
 	text-decoration: underline;
 }
+
+body div {
+	margin-top: 20px;
+	margin-bottom: 20px;
+}
