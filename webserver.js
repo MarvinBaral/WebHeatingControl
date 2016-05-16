@@ -7,7 +7,6 @@
 
 const express = require('express');
 const app = express();
-const http = require('http');
 const bodyParser = require('body-parser');
 const fs = require('fs'); //file-system
 //const exec = require('child_process').exec;
@@ -61,5 +60,5 @@ app.get('/*.css', function (req, res) {
 	res.sendFile(rootDir + filename);
 });
 
-http.createServer(app).listen(80);
+app.listen(80);
 
