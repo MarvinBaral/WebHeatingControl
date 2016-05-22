@@ -9,7 +9,7 @@ const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
 const fs = require('fs'); //file-system
-//const exec = require('child_process').exec;
+const exec = require('child_process').exec;
 const rootDir = '/root/heating/'
 const fileHeader = rootDir + 'header.html';
 const fileFooter = rootDir + 'footer.html';
@@ -58,6 +58,13 @@ app.get('/*.css', function (req, res) {
 	res.contentType('text/css');
 	var filename = req.path;
 	res.sendFile(rootDir + filename);
+});
+
+app.get('/temp', function (req, res) {
+	res.contentType('text/plain');
+	exec('/opt/vc/bin/vcgencmd measure_temp', function (error, stdout, stderr) {
+		res.send(stdout);
+	});
 });
 
 app.listen(80);
