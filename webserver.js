@@ -63,7 +63,10 @@ app.get('/*.css', function (req, res) {
 app.get('/temp', function (req, res) {
 	res.contentType('text/plain');
 	exec('/opt/vc/bin/vcgencmd measure_temp', function (error, stdout, stderr) {
-		res.send(stdout);
+		var temp = stdout;
+		temp = temp.replace('temp=', '');
+		temp = temp.replace("'C", '');
+		res.send(temp);
 	});
 });
 
