@@ -15,6 +15,7 @@ const fileHeader = rootDir + 'header.html';
 const fileFooter = rootDir + 'footer.html';
 const fileIndex = rootDir + 'index.html';
 const fileLED = '/sys/class/leds/led0/brightness'; //for RaspberryPi
+const dirGPIO = 'sys/class/gpio/';
 const assemblePage = function (fileToEmbed) {
 	var content = fs.readFileSync(fileHeader, 'utf-8') + fs.readFileSync(fileToEmbed, 'utf-8') + fs.readFileSync(fileFooter, 'utf-8');
 	return content;
@@ -22,6 +23,20 @@ const assemblePage = function (fileToEmbed) {
 const toggleLED = function() {
 	statusLED = 1 - statusLED;	
 	fs.writeFileSync(fileLED, statusLED);
+};
+const initGPIO = function(pin, direction) { //direction: 'in' or 'out' 
+	fs.writeFile(dirGPIO + 'export', pin, function(){
+		console.log('wrote into export');
+	});
+	fs.writeFileSync(dirGPIO + 'gpio' + pin + '/' + 'direction', direction);
+	console.log('wrote into direction');
+};
+const writeGPIO = function(gpio, value) {
+	fs.writeFileSync(dirGPIO + 'gpio' + gpio + '/' + 'value', value);
+	console.log('wrote into value');
+};
+const readGPIO = function(gpio) {
+	return fs.readFileSync(dirGPIO + 'gpio' + gpio + '/' + 'value');
 };
 
 //global variables
@@ -70,5 +85,20 @@ app.get('/temp', function (req, res) {
 	});
 });
 
+app.all('/pump', function (req, res) {
+	initGPIO('3', 'out');
+	writeGPIO('3', '1');
+	console.log('pump');
+	res.redirect(303, '/');
+});
+
+app.all('/burn', function (req, res) {
+	initGPIO('3', 'out');
+	writeGPIO('3', '0');
+	console.log('burn');
+	res.redirect(303, '/');
+});
+
 app.listen(80);
+
 
