@@ -1,4 +1,6 @@
 <h1>A great interactive image of a heating-system:</h1>
+
+<!--
 <div class='test'>
 </div>
 <div class='pipe-horizontal'>
@@ -14,10 +16,14 @@
 <div class='pipe-horizontal'>
 	<div class='pump'></div>
 </div>
+-->
+
 <form action="/pump" method="POST">
 	<input type="submit" value="Pumpe">
+	<p>Status: __<<pump_status>>__</p>
 </form>
 <form action="/burn" method="POST">
 	<input type="submit" value="Brenner">
+	<p>Status: __<<burner_status>>__</p>
 </form>
-<p>CPU temperature: __<<cpu_temp>>__</p>
+<p>CPU temperature: __<<cpu_temp>>__°C</p>

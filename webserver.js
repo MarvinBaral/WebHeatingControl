@@ -38,12 +38,13 @@ const toggleLED = function() {
 	statusLED = 1 - statusLED;	
 	fs.writeFileSync(fileLED, statusLED);
 };
-const initGPIO = function(pin, direction) { //direction: 'in' or 'out' 
-	fs.writeFile(dirGPIO + 'export', pin, function(){
+const initGPIO_Async = function(pin, direction) { //direction: 'in' or 'out' 
+	fs.writeFile(dirGPIO + 'export', pin, function() {
 		console.log('wrote into export');
+		fs.writeFile(dirGPIO + 'gpio' + pin + '/' + 'direction', direction, function() {
+			console.log('wrote into direction');
+		});
 	});
-	fs.writeFileSync(dirGPIO + 'gpio' + pin + '/' + 'direction', direction);
-	console.log('wrote into direction');
 };
 const writeGPIO = function(gpio, value) {
 	fs.writeFileSync(dirGPIO + 'gpio' + gpio + '/' + 'value', value);
@@ -57,16 +58,30 @@ const readGPIO = function(gpio) {
 //====================================================
 
 var statusLED = 0;
-var properties = {
+var properties = { //Object
 	cpu_temp: 0,
-	burner_status: "N/A",
-	pump_status: "N/A"
+	burner_status: 0,
+	pump_status: 0
 };
+var pinsIndex = { //Object
+	LED: 0,
+	pump: 1,
+	burner: 2
+};
+var pins = [ //Array
+	3,
+	21,
+	20
+];
 
 //init
 //====================================================
 
-initGPIO(3, 'out');
+console.log("short befor initing gpios");
+for (i = 0; i < pins.length; i++) {
+	initGPIO_Async(pins[i], 'out');
+	console.log("inited gpio " + i);
+}
 
 //the temperature regulation
 //====================================================
@@ -104,17 +119,17 @@ app.get('/temp', function (req, res) {
 });
 
 app.all('/pump', function (req, res) {
-	writeGPIO(3, 1);
+	properties.pump_status = 1 - properties.pump_status;
+	writeGPIO(pins[pinsIndex.pump], properties.pump_status);
 	console.log('pump');
 	res.redirect(303, '/');
 });
 
 app.all('/burn', function (req, res) {
-	writeGPIO(3, 0);
+	properties.burner_status = 1 - properties.burner_status;
+	writeGPIO(pins[pinsIndex.burner], properties.burner_status);
 	console.log('burn');
 	res.redirect(303, '/');
 });
 
 app.listen(80);
-
-
