@@ -44,6 +44,11 @@ const readGPIO = function(gpio) {
 
 var statusLED = 0;
 
+//init
+//====================================================
+
+initGPIO('3', 'out');
+
 //the temperature regulation
 //====================================================
 
@@ -86,14 +91,12 @@ app.get('/temp', function (req, res) {
 });
 
 app.all('/pump', function (req, res) {
-	initGPIO('3', 'out');
 	writeGPIO('3', '1');
 	console.log('pump');
 	res.redirect(303, '/');
 });
 
 app.all('/burn', function (req, res) {
-	initGPIO('3', 'out');
 	writeGPIO('3', '0');
 	console.log('burn');
 	res.redirect(303, '/');
