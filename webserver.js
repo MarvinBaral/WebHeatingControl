@@ -16,8 +16,22 @@ const fileFooter = rootDir + 'footer.html';
 const fileIndex = rootDir + 'index.html';
 const fileLED = '/sys/class/leds/led0/brightness'; //for RaspberryPi
 const dirGPIO = 'sys/class/gpio/';
-const assemblePage = function (fileToEmbed) {
+const assemblePage = function(fileToEmbed) {
 	var content = fs.readFileSync(fileHeader, 'utf-8') + fs.readFileSync(fileToEmbed, 'utf-8') + fs.readFileSync(fileFooter, 'utf-8');
+	return content;
+};
+const fillWithVariables = function(content) { //http://www.w3schools.com/jsref/jsref_obj_regexp.asp
+	var matches = content.match(/__<<\S*>>__/g);
+	if (matches !== null) {
+		console.log("occurences: " + matches.length);
+		for (i = 0; i < matches.length; i++) {
+			var match = matches[i];
+			match = match.replace('__<<', '').replace('>>__', '');
+			var matchValue = properties[match];
+			content = content.replace(matches[i], matchValue);
+			console.log("replaced " + matches[i] + " with " + matchValue);	
+		}
+	}
 	return content;
 };
 const toggleLED = function() {
@@ -75,7 +89,7 @@ setInterval(main, 1000);
 
 app.get('/', function (req, res) {
 	res.contentType('text/html');
-	res.send(assemblePage(fileIndex));
+	res.send(fillWithVariables(assemblePage(fileIndex)));
 });
 
 app.get('/*.css', function (req, res) {
