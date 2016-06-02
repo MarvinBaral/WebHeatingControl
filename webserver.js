@@ -77,10 +77,8 @@ var pins = [ //Array
 //init
 //====================================================
 
-console.log("short befor initing gpios");
 for (i = 0; i < pins.length; i++) {
 	initGPIO_Async(pins[i], 'out');
-	console.log("inited gpio " + i);
 }
 
 //the temperature regulation
