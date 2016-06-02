@@ -43,6 +43,11 @@ const readGPIO = function(gpio) {
 //====================================================
 
 var statusLED = 0;
+var properties = {
+	cpu_temp: 0,
+	burner_status: "N/A",
+	pump_status: "N/A"
+};
 
 //init
 //====================================================
@@ -60,6 +65,12 @@ var main = function () {
 		//burner on
 	}
 	*/
+	exec('/opt/vc/bin/vcgencmd measure_temp', function (error, stdout, stderr) {
+		var temp = stdout;
+		temp = temp.replace('temp=', '');
+		temp = temp.replace("'C", '');
+		properties.cpu_temp = temp;
+	});
 	toggleLED(); //to visualize activity (like heartbeat, but only for this application)
 };
 setInterval(main, 1000);
@@ -82,12 +93,7 @@ app.get('/*.css', function (req, res) {
 
 app.get('/temp', function (req, res) {
 	res.contentType('text/plain');
-	exec('/opt/vc/bin/vcgencmd measure_temp', function (error, stdout, stderr) {
-		var temp = stdout;
-		temp = temp.replace('temp=', '');
-		temp = temp.replace("'C", '');
-		res.send(temp);
-	});
+	res.send(properties["cpu_temp"]);
 });
 
 app.all('/pump', function (req, res) {
