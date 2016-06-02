@@ -58,13 +58,6 @@ initGPIO(3, 'out');
 //====================================================
 
 var main = function () {
-	/* example code
-	if (temp >= targetTemp) {
-		//burner off
-	} else {
-		//burner on
-	}
-	*/
 	exec('/opt/vc/bin/vcgencmd measure_temp', function (error, stdout, stderr) {
 		var temp = stdout;
 		temp = temp.replace('temp=', '');
