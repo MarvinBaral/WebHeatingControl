@@ -10,3 +10,7 @@ body div {
 	margin: 20px;
 	float: left;
 }
+
+@viewport {
+	width: device-width;
+}
