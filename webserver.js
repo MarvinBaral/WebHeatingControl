@@ -10,6 +10,7 @@ const app = express();
 const bodyParser = require('body-parser');
 const fs = require('fs'); //file-system
 const exec = require('shelljs').exec;
+var serial = require('serialport-js');
 const rootDir = '/root/heating/'
 const fileHeader = rootDir + 'header.html';
 const fileFooter = rootDir + 'footer.html';
@@ -61,7 +62,10 @@ var statusLED = 0;
 var properties = { //Object
 	cpu_temp: 0,
 	burner_status: 0,
-	pump_status: 0
+	pump_status: 0,
+	temp_outside: 0,
+	temp_storage_top: 0,
+	temp_storage_mid: 0
 };
 var pinsIndex = { //Object
 	LED: 0,
@@ -73,7 +77,35 @@ var pins = [ //Array
 	21,
 	20
 ];
+var sensors = [
+	'temp_outside',
+	'temp_storage_top',
+	'temp_storage_mid'
+]
 
+//serialPort: https://www.npmjs.com/package/serialport2
+//====================================================
+
+serial.open('/dev/ttyACM0', start, '\n');
+
+function start(port) {
+	console.log("SerialPort opened");
+
+	port.on('error', function(err) {
+		console.log(err);
+	});
+ 
+	port.on('data', function(data) {
+		var sData = data.toString();
+		console.log(sData);
+		var aData = sData.split(': ');
+		if (aData[0] < 3) {
+			properties[sensors[aData[0]]] = aData[1];
+		}
+		
+	});
+};
+ 
 //init
 //====================================================
 
