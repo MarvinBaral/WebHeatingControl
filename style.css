@@ -14,3 +14,7 @@ body div {
 @viewport {
 	width: device-width;
 }
+
+img {
+	float: right;
+}

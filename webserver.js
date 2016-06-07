@@ -169,7 +169,7 @@ app.get('/*.css', function (req, res) {
 
 app.get('/storage.svg', function (req, res) {
 	const tempMin = 20;
-	const tempMax = 100;
+	const tempMax = 80;
 	const tempDiff = tempMax - tempMin;
 	const RGBPerTemp = 255 / tempDiff;
 	storage.temp_top = properties.temp_storage_top;
