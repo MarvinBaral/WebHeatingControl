@@ -17,23 +17,39 @@ const fileFooter = rootDir + 'footer.html';
 const fileIndex = rootDir + 'index.html';
 const fileLED = '/sys/class/leds/led0/brightness'; //for RaspberryPi
 const dirGPIO = 'sys/class/gpio/';
+const svgStorage = rootDir + 'storage.svg';
 const assemblePage = function(fileToEmbed) {
 	var content = fs.readFileSync(fileHeader, 'utf-8') + fs.readFileSync(fileToEmbed, 'utf-8') + fs.readFileSync(fileFooter, 'utf-8');
 	return content;
 };
-const fillWithVariables = function(content) { //http://www.w3schools.com/jsref/jsref_obj_regexp.asp
-	var matches = content.match(/__<<\S*>>__/g);
+const fillWithVariables = function(string) { //http://www.w3schools.com/jsref/jsref_obj_regexp.asp
+	var matches = string.match(/__<<\S*>>__/g);
 	if (matches !== null) {
 		console.log("occurences: " + matches.length);
 		for (i = 0; i < matches.length; i++) {
 			var match = matches[i];
 			match = match.replace('__<<', '').replace('>>__', '');
 			var matchValue = properties[match];
-			content = content.replace(matches[i], matchValue);
+			string = string.replace(matches[i], matchValue);
 			console.log("replaced " + matches[i] + " with " + matchValue);	
 		}
 	}
-	return content;
+	return string;
+};
+const fillStorageWithVariables = function(string) { //http://www.w3schools.com/jsref/jsref_obj_regexp.asp
+	string = string.toString();
+	var matches = string.match(/__<<\S*>>__/g);
+	if (matches !== null) {
+		console.log("occurences: " + matches.length);
+		for (i = 0; i < matches.length; i++) {
+			var match = matches[i];
+			match = match.replace('__<<', '').replace('>>__', '');
+			var matchValue = storage[match];
+			string = string.replace(matches[i], matchValue);
+			console.log("replaced " + matches[i] + " with " + matchValue);	
+		}
+	}
+	return string;
 };
 const toggleLED = function() {
 	statusLED = 1 - statusLED;	
@@ -67,6 +83,14 @@ var properties = { //Object
 	temp_storage_top: 0,
 	temp_storage_mid: 0
 };
+var storage = {
+	temp_top: 0,
+	temp_mid: 0,
+	temp_bot: 0,
+	rgb_top: "255, 255, 255",
+	rgb_mid: "255, 255, 255",
+	rgb_bot: "255, 255, 255"
+};
 var pinsIndex = { //Object
 	LED: 0,
 	pump: 1,
@@ -81,7 +105,7 @@ var sensors = [
 	'temp_outside',
 	'temp_storage_top',
 	'temp_storage_mid'
-]
+];
 
 //serialPort: https://www.npmjs.com/package/serialport2
 //====================================================
@@ -134,13 +158,35 @@ setInterval(main, 1000);
 
 app.get('/', function (req, res) {
 	res.contentType('text/html');
-	res.send(fillWithVariables(assemblePage(fileIndex)));
+	res.send(fillWithVariables(assemblePage(fileIndex, properties)));
 });
 
 app.get('/*.css', function (req, res) {
 	res.contentType('text/css');
 	var filename = req.path;
 	res.sendFile(rootDir + filename);
+});
+
+app.get('/storage.svg', function (req, res) {
+	const tempMin = 20;
+	const tempMax = 100;
+	const tempDiff = tempMax - tempMin;
+	const RGBPerTemp = 255 / tempDiff;
+	storage.temp_top = properties.temp_storage_top;
+	storage.temp_mid = properties.temp_storage_mid;
+	storage.temp_bot = properties.temp_storage_bot;
+	var rgb_red_top = Math.round((storage.temp_top - tempMin) * RGBPerTemp);
+	storage.rgb_top = rgb_red_top + ', 0, ' + (255 - rgb_red_top); 
+	var rgb_red_mid = Math.round((storage.temp_mid - tempMin) * RGBPerTemp);
+	storage.rgb_mid = rgb_red_mid + ', 0, ' + (255 - rgb_red_mid); 
+	var rgb_red_bot = Math.round((storage.temp_bot - tempMin) * RGBPerTemp);
+	storage.rgb_bot = rgb_red_bot + ', 0, ' + (255 - rgb_red_bot); 
+	
+	res.contentType('image/svg+xml');
+	var content = fs.readFileSync(svgStorage);
+	content = fillStorageWithVariables(content);
+
+	res.send(content);
 });
 
 app.get('/temp', function (req, res) {
