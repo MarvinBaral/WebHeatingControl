@@ -18,7 +18,7 @@ const fileIndex = rootDir + 'index.html';
 const fileLED = '/sys/class/leds/led0/brightness'; //for RaspberryPi
 const dirGPIO = 'sys/class/gpio/';
 const svgStorage = rootDir + 'storage.svg';
-const NUM_SENSORS = 4;
+const NUM_SENSORS = 5;
 const RGB_TEMP_MIN = 10;
 const RGB_TEMP_MAX = 80;
 const RGB_TEMP_DIFF = RGB_TEMP_MAX - RGB_TEMP_MIN
@@ -97,7 +97,8 @@ var properties = { //Object
 	temp_outside: 0,
 	temp_storage_top: 0,
 	temp_storage_mid: 0,
-	temp_storage_bot: 0
+	temp_storage_bot: 0,
+	temp_to_heating_circle: 0
 };
 var storage = {
 	temp_top: 0,
@@ -121,7 +122,8 @@ var sensors = [ //mapping of indexes to positions
 	'temp_outside',
 	'temp_storage_top',
 	'temp_storage_mid',
-	'temp_storage_bot'
+	'temp_storage_bot',
+	'temp_to_heating_circle'
 ];
 
 //serialPort: https://www.npmjs.com/package/serialport2
