@@ -10,7 +10,7 @@ const app = express();
 const bodyParser = require('body-parser');
 const fs = require('fs'); //file-system
 const exec = require('shelljs').exec;
-var serial = require('serialport-js');
+const serial = require('serialport-js');
 const rootDir = '/root/heating/'
 const fileHeader = rootDir + 'header.html';
 const fileFooter = rootDir + 'footer.html';
@@ -18,6 +18,7 @@ const fileIndex = rootDir + 'index.html';
 const fileLED = '/sys/class/leds/led0/brightness'; //for RaspberryPi
 const dirGPIO = 'sys/class/gpio/';
 const svgStorage = rootDir + 'storage.svg';
+const svgGraph = rootDir + 'graph.svg';
 const NUM_SENSORS = 5;
 const RGB_TEMP_MIN = 10;
 const RGB_TEMP_MAX = 80;
@@ -193,6 +194,12 @@ app.get('/storage.svg', function (req, res) {
 	var content = fs.readFileSync(svgStorage);
 	content = fillStorageWithVariables(content);
 
+	res.send(content);
+});
+
+app.get('/graph.svg', function (req, res) {
+	res.contentType('image/svg+xml');
+	var content = fs.readFileSync(svgGraph);
 	res.send(content);
 });
 
