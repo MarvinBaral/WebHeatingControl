@@ -19,7 +19,7 @@ const fileLED = '/sys/class/leds/led0/brightness'; //for RaspberryPi
 const dirGPIO = 'sys/class/gpio/';
 const svgStorage = rootDir + 'storage.svg';
 const NUM_SENSORS = 4;
-const RGB_TEMP_MIN = 20;
+const RGB_TEMP_MIN = 10;
 const RGB_TEMP_MAX = 80;
 const RGB_TEMP_DIFF = RGB_TEMP_MAX - RGB_TEMP_MIN
 const RGBPerTemp = 255 / RGB_TEMP_DIFF;
@@ -39,13 +39,11 @@ const assemblePage = function(fileToEmbed) {
 const fillWithVariables = function(string) { //http://www.w3schools.com/jsref/jsref_obj_regexp.asp
 	var matches = string.match(/__<<\S*>>__/g);
 	if (matches !== null) {
-		console.log("occurences: " + matches.length);
 		for (i = 0; i < matches.length; i++) {
 			var match = matches[i];
 			match = match.replace('__<<', '').replace('>>__', '');
 			var matchValue = properties[match];
 			string = string.replace(matches[i], matchValue);
-			console.log("replaced " + matches[i] + " with " + matchValue);	
 		}
 	}
 	return string;
@@ -60,7 +58,6 @@ const fillStorageWithVariables = function(string) { //http://www.w3schools.com/j
 			match = match.replace('__<<', '').replace('>>__', '');
 			var matchValue = storage[match];
 			string = string.replace(matches[i], matchValue);
-			console.log("replaced " + matches[i] + " with " + matchValue);	
 		}
 	}
 	return string;
@@ -71,15 +68,12 @@ const toggleLED = function() {
 };
 const initGPIO_Async = function(pin, direction) { //direction: 'in' or 'out' 
 	fs.writeFile(dirGPIO + 'export', pin, function() {
-		console.log('wrote into export');
 		fs.writeFile(dirGPIO + 'gpio' + pin + '/' + 'direction', direction, function() {
-			console.log('wrote into direction');
 		});
 	});
 };
 const writeGPIO = function(gpio, value) {
 	fs.writeFileSync(dirGPIO + 'gpio' + gpio + '/' + 'value', value);
-	console.log('wrote into value');
 };
 const readGPIO = function(gpio) {
 	return fs.readFileSync(dirGPIO + 'gpio' + gpio + '/' + 'value');
