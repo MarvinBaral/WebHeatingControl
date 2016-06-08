@@ -18,6 +18,7 @@ const fileIndex = rootDir + 'index.html';
 const fileLED = '/sys/class/leds/led0/brightness'; //for RaspberryPi
 const dirGPIO = 'sys/class/gpio/';
 const svgStorage = rootDir + 'storage.svg';
+const NUM_SENSORS = 4;
 const RGB_TEMP_MIN = 20;
 const RGB_TEMP_MAX = 80;
 const RGB_TEMP_DIFF = RGB_TEMP_MAX - RGB_TEMP_MIN
@@ -145,7 +146,7 @@ function start(port) {
 		var sData = data.toString();
 		console.log(sData);
 		var aData = sData.split(': ');
-		if (aData[0] < 4) {
+		if (aData[0] < NUM_SENSORS) {
 			properties[sensors[aData[0]]] = aData[1];
 		}
 		
