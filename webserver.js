@@ -164,6 +164,7 @@ for (i = 0; i < pins.length; i++) {
 //====================================================
 
 var main = function () {
+	updateTempCPU();
 	toggleLED(); //to visualize activity (like heartbeat, but only for this application)
 };
 setInterval(main, 1000);
