@@ -18,6 +18,19 @@ const fileIndex = rootDir + 'index.html';
 const fileLED = '/sys/class/leds/led0/brightness'; //for RaspberryPi
 const dirGPIO = 'sys/class/gpio/';
 const svgStorage = rootDir + 'storage.svg';
+const RGB_TEMP_MIN = 20;
+const RGB_TEMP_MAX = 80;
+const RGB_TEMP_DIFF = RGB_TEMP_MAX - RGB_TEMP_MIN
+const RGBPerTemp = 255 / RGB_TEMP_DIFF;
+const calcRGB = function(rgb_temperature) {
+	if (rgb_temperature > RGB_TEMP_MAX) {
+		rgb_temperature = RGB_TEMP_MAX;
+	} else if (rgb_temperature < RGB_TEMP_MIN) {
+		rgb_temperature = RGB_TEMP_MIN;
+	}
+	var rgb_red = Math.round((rgb_temperature - RGB_TEMP_MIN) * RGBPerTemp);
+	return rgb_red + ', 0, ' + (255 - rgb_red); 	
+};
 const assemblePage = function(fileToEmbed) {
 	var content = fs.readFileSync(fileHeader, 'utf-8') + fs.readFileSync(fileToEmbed, 'utf-8') + fs.readFileSync(fileFooter, 'utf-8');
 	return content;
@@ -168,19 +181,12 @@ app.get('/*.css', function (req, res) {
 });
 
 app.get('/storage.svg', function (req, res) {
-	const tempMin = 20;
-	const tempMax = 80;
-	const tempDiff = tempMax - tempMin;
-	const RGBPerTemp = 255 / tempDiff;
 	storage.temp_top = properties.temp_storage_top;
 	storage.temp_mid = properties.temp_storage_mid;
 	storage.temp_bot = properties.temp_storage_bot;
-	var rgb_red_top = Math.round((storage.temp_top - tempMin) * RGBPerTemp);
-	storage.rgb_top = rgb_red_top + ', 0, ' + (255 - rgb_red_top); 
-	var rgb_red_mid = Math.round((storage.temp_mid - tempMin) * RGBPerTemp);
-	storage.rgb_mid = rgb_red_mid + ', 0, ' + (255 - rgb_red_mid); 
-	var rgb_red_bot = Math.round((storage.temp_bot - tempMin) * RGBPerTemp);
-	storage.rgb_bot = rgb_red_bot + ', 0, ' + (255 - rgb_red_bot); 
+	storage.rgb_top = calcRGB(storage.temp_top); 
+	storage.rgb_mid = calcRGB(storage.temp_mid);
+	storage.rgb_bot = calcRGB(storage.temp_bot);
 	
 	res.contentType('image/svg+xml');
 	var content = fs.readFileSync(svgStorage);
