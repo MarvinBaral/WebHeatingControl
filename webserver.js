@@ -40,27 +40,14 @@ const assemblePage = function(fileToEmbed) {
 	var content = fs.readFileSync(fileHeader, 'utf-8') + fs.readFileSync(fileToEmbed, 'utf-8') + fs.readFileSync(fileFooter, 'utf-8');
 	return content;
 };
-const fillWithVariables = function(string) { //http://www.w3schools.com/jsref/jsref_obj_regexp.asp
-	var matches = string.match(TEMPLATING_REGEX);
-	if (matches !== null) {
-		for (i = 0; i < matches.length; i++) {
-			var match = matches[i];
-			match = match.replace(TEMPLATING_SIGN_BEGIN, '').replace(TEMPLATING_SIGN_END, '');
-			var matchValue = properties[match];
-			string = string.replace(matches[i], matchValue);
-		}
-	}
-	return string;
-};
-const fillStorageWithVariables = function(string) { //http://www.w3schools.com/jsref/jsref_obj_regexp.asp
+const fillWithVariables = function(string, variables) { //http://www.w3schools.com/jsref/jsref_obj_regexp.asp
 	string = string.toString();
 	var matches = string.match(TEMPLATING_REGEX);
 	if (matches !== null) {
-		console.log("occurences: " + matches.length);
 		for (i = 0; i < matches.length; i++) {
 			var match = matches[i];
 			match = match.replace(TEMPLATING_SIGN_BEGIN, '').replace(TEMPLATING_SIGN_END, '');
-			var matchValue = storage[match];
+			var matchValue = variables[match];
 			string = string.replace(matches[i], matchValue);
 		}
 	}
@@ -176,7 +163,7 @@ setInterval(main, 1000);
 
 app.get('/', function (req, res) {
 	res.contentType('text/html');
-	res.send(fillWithVariables(assemblePage(fileIndex, properties)));
+	res.send(fillWithVariables(assemblePage(fileIndex), properties));
 });
 
 app.get('/*.css', function (req, res) {
@@ -195,7 +182,7 @@ app.get('/storage.svg', function (req, res) {
 	
 	res.contentType('image/svg+xml');
 	var content = fs.readFileSync(svgStorage);
-	content = fillStorageWithVariables(content);
+	content = fillWithVariables(content, storage);
 
 	res.send(content);
 });
