@@ -83,7 +83,14 @@ const writeGPIO = function(gpio, value) {
 const readGPIO = function(gpio) {
 	return fs.readFileSync(dirGPIO + 'gpio' + gpio + '/' + 'value');
 };
-
+const updateTempCPU = function() {
+	exec('/opt/vc/bin/vcgencmd measure_temp', function (error, stdout, stderr) {
+		var temp = stdout;
+		temp = temp.replace('temp=', '');
+		temp = temp.replace("'C", '');
+		properties.cpu_temp = temp;
+	});
+};
 //global variables
 //====================================================
 
@@ -94,7 +101,8 @@ var properties = { //Object
 	pump_status: 0,
 	temp_outside: 0,
 	temp_storage_top: 0,
-	temp_storage_mid: 0
+	temp_storage_mid: 0,
+	temp_storage_bot: 0
 };
 var storage = {
 	temp_top: 0,
@@ -114,10 +122,11 @@ var pins = [ //Array
 	21,
 	20
 ];
-var sensors = [
+var sensors = [ //mapping of indexes to positions
 	'temp_outside',
 	'temp_storage_top',
-	'temp_storage_mid'
+	'temp_storage_mid',
+	'temp_storage_bot'
 ];
 
 //serialPort: https://www.npmjs.com/package/serialport2
@@ -136,7 +145,7 @@ function start(port) {
 		var sData = data.toString();
 		console.log(sData);
 		var aData = sData.split(': ');
-		if (aData[0] < 3) {
+		if (aData[0] < 4) {
 			properties[sensors[aData[0]]] = aData[1];
 		}
 		
@@ -154,12 +163,6 @@ for (i = 0; i < pins.length; i++) {
 //====================================================
 
 var main = function () {
-	exec('/opt/vc/bin/vcgencmd measure_temp', function (error, stdout, stderr) {
-		var temp = stdout;
-		temp = temp.replace('temp=', '');
-		temp = temp.replace("'C", '');
-		properties.cpu_temp = temp;
-	});
 	toggleLED(); //to visualize activity (like heartbeat, but only for this application)
 };
 setInterval(main, 1000);
