@@ -19,6 +19,9 @@ const fileLED = '/sys/class/leds/led0/brightness'; //for RaspberryPi
 const dirGPIO = 'sys/class/gpio/';
 const svgStorage = rootDir + 'storage.svg';
 const svgGraph = rootDir + 'graph.svg';
+const TEMPLATING_SIGN_BEGIN = '__{{';
+const TEMPLATING_SIGN_END = '}}__';
+const TEMPLATING_REGEX = /__\{\{\S*\}\}__/g;
 const NUM_SENSORS = 5;
 const RGB_TEMP_MIN = 10;
 const RGB_TEMP_MAX = 80;
@@ -38,11 +41,11 @@ const assemblePage = function(fileToEmbed) {
 	return content;
 };
 const fillWithVariables = function(string) { //http://www.w3schools.com/jsref/jsref_obj_regexp.asp
-	var matches = string.match(/__<<\S*>>__/g);
+	var matches = string.match(TEMPLATING_REGEX);
 	if (matches !== null) {
 		for (i = 0; i < matches.length; i++) {
 			var match = matches[i];
-			match = match.replace('__<<', '').replace('>>__', '');
+			match = match.replace(TEMPLATING_SIGN_BEGIN, '').replace(TEMPLATING_SIGN_END, '');
 			var matchValue = properties[match];
 			string = string.replace(matches[i], matchValue);
 		}
@@ -51,12 +54,12 @@ const fillWithVariables = function(string) { //http://www.w3schools.com/jsref/js
 };
 const fillStorageWithVariables = function(string) { //http://www.w3schools.com/jsref/jsref_obj_regexp.asp
 	string = string.toString();
-	var matches = string.match(/__<<\S*>>__/g);
+	var matches = string.match(TEMPLATING_REGEX);
 	if (matches !== null) {
 		console.log("occurences: " + matches.length);
 		for (i = 0; i < matches.length; i++) {
 			var match = matches[i];
-			match = match.replace('__<<', '').replace('>>__', '');
+			match = match.replace(TEMPLATING_SIGN_BEGIN, '').replace(TEMPLATING_SIGN_END, '');
 			var matchValue = storage[match];
 			string = string.replace(matches[i], matchValue);
 		}

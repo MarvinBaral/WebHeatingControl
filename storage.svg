@@ -16,13 +16,13 @@ xmlns:xlink="http://www.w3.org/1999/xlink" width="250" height="400">
 	</style>
 	<defs>
 		<linearGradient id="storage" x1="0%" y1="0%" x2="0%" y2="100%">
-			<stop offset="10%" stop-color="rgb(__<<rgb_top>>__)" />
-			<stop offset="50%" stop-color="rgb(__<<rgb_mid>>__)" />
-			<stop offset="90%" stop-color="rgb(__<<rgb_bot>>__)" />
+			<stop offset="10%" stop-color="rgb(__{{rgb_top}}__)" />
+			<stop offset="50%" stop-color="rgb(__{{rgb_mid}}__)" />
+			<stop offset="90%" stop-color="rgb(__{{rgb_bot}}__)" />
 		</linearGradient>
 	</defs>
 	<rect x ="2%" y ="2%" width ="96%" height ="96%" rx ="50" ry ="50" fill="url(#storage)" stroke="black" stroke-width="4"/>
-	<text x="50%" y="12%">__<<temp_top>>__ °C</text>
-	<text x="50%" y="52%">__<<temp_mid>>__ °C</text>
-	<text x="50%" y="92%">__<<temp_bot>>__ °C</text>
+	<text x="50%" y="12%">__{{temp_top}}__ °C</text>
+	<text x="50%" y="52%">__{{temp_mid}}__ °C</text>
+	<text x="50%" y="92%">__{{temp_bot}}__ °C</text>
 </svg>

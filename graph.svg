@@ -14,5 +14,7 @@ xmlns:xlink="http://www.w3.org/1999/xlink" width="250" height="400">
 			}
 		]]>
 	</style>
+	<!-- Background -->
 	<rect x ="0%" y ="0%" width ="100%" height ="100%" fill="rgb(0, 0, 70)"/>
+	__{{content}}__	
 </svg>
