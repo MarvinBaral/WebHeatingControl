@@ -193,11 +193,6 @@ app.get('/graph.svg', function (req, res) {
 	res.send(content);
 });
 
-app.get('/temp', function (req, res) {
-	res.contentType('text/plain');
-	res.send(properties["cpu_temp"]);
-});
-
 app.all('/pump', function (req, res) {
 	properties.pump_status = 1 - properties.pump_status;
 	writeGPIO(pins[pinsIndex.pump], properties.pump_status);
