@@ -5,16 +5,13 @@
 <svg xmlns="http://www.w3.org/2000/svg"
 xmlns:xlink="http://www.w3.org/1999/xlink" width="300" height="400">
 	<defs>
-		<linearGradient id="top" x1="0%" y1="0%" x2="0%" y2="50%">
+		<linearGradient id="storage" x1="0%" y1="0%" x2="0%" y2="100%">
 			<stop offset="0%" stop-color="rgb(__<<rgb_top>>__)" />
-			<stop offset="100%" stop-color="rgb(__<<rgb_mid>>__)" />
-		</linearGradient>
-		<linearGradient id="bot" x1="0%" y1="50%" x2="0%" y2="100%">
-			<stop offset="0%" stop-color="rgb(__<<rgb_mid>>__)" />
+			<stop offset="50%" stop-color="rgb(__<<rgb_mid>>__)" />
 			<stop offset="100%" stop-color="rgb(__<<rgb_bot>>__)" />
 		</linearGradient>
 	</defs>
-	<rect x ="10" y ="10" width ="280" height ="380" rx ="50" ry ="50" fill="url(#top)" stroke="black" stroke-width="4"/>
+	<rect x ="10" y ="10" width ="280" height ="380" rx ="50" ry ="50" fill="url(#storage)" stroke="black" stroke-width="4"/>
 	<text x="150" y="50" text-anchor="middle" font-family="sans-serif" font-size="20px" fill="black">__<<temp_top>>__ °C</text>
 	<text x="150" y="200" text-anchor="middle" font-family="sans-serif" font-size="20px" fill="black">__<<temp_mid>>__ °C</text>
 	<text x="150" y="350" text-anchor="middle" font-family="sans-serif" font-size="20px" fill="black">__<<temp_bot>>__ °C</text>
