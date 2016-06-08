@@ -19,3 +19,7 @@ body div {
 img {
 	float: right;
 }
+
+a {
+	color: grey;
+}
