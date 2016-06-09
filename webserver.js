@@ -99,13 +99,13 @@ const svgRect = function(x, y, width, height, cssClass) {
 	if (cssClass === undefined) {
 		cssClass = '';
 	}
-	return '<rect x="' + x + '" y="' + y + '" width="' + width + '" height="' + height + '"/>';
+	return '<rect x="' + x + '" y="' + y + '" width="' + width + '" height="' + height + '" class="' + cssClass + '"/>';
 }
 const svgCircle = function(x, y, r, cssClass) {
 	if (cssClass === undefined) {
 		cssClass = '';
 	}
-	return '<circle cx="' + x + '" cy="' + y + '" r="' + r + '"/>';
+	return '<circle cx="' + x + '" cy="' + y + '" r="' + r + '" class="' + cssClass + '"/>';
 }
 const assembleGraph = function() {
 	const width = 300;
@@ -237,7 +237,7 @@ app.get('/graph.svg', function (req, res) {
 	graph.height = 200;
 	graph.width = 300;
 	graph.content += svgLine(50, 50, 50, 100, 'fat');
-	graph.content += svgRect(100, 50, 300, 30, 'fat');
+	graph.content += svgRect(100, 50, 300, 30, 'drawingArea');
 	graph.content += svgCircle(250, 30, 20, 'fat');
 
 	res.contentType('image/svg+xml');

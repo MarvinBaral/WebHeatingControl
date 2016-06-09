@@ -19,9 +19,20 @@ xmlns:xlink="http://www.w3.org/1999/xlink" width="__{{width}}__" height="__{{hei
 			line.fat {
 				stroke-width: 5px;
 			}
+			rect.drawingArea {
+				fill: rgb(0, 0, 70);
+				stroke: white;
+				stroke-width: 3px;
+			}
+			circle {
+				fill: red;
+			}
+			polyline {
+				fill: red;
+			}
 		]]>
 	</style>
 	<!-- Background -->
-	<rect x ="0%" y ="0%" width ="100%" height ="100%" fill="rgb(0, 0, 70)"/>
+	<rect x ="0%" y ="0%" width ="100%" height ="100%" fill="rgb(0, 0, 35)"/>
 	__{{content}}__	
 </svg>
