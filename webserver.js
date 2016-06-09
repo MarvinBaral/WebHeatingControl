@@ -95,6 +95,18 @@ const svgLine = function(x1, y1, x2, y2, cssClass) {
 	}
 	return '<line x1="' + x1 + '" y1="' + y1 + '" x2="' + x2 + '" y2="' + y2 + '" class="' + cssClass + '"/>';
 }
+const svgRect = function(x, y, width, height, cssClass) {
+	if (cssClass === undefined) {
+		cssClass = '';
+	}
+	return '<rect x="' + x + '" y="' + y + '" width="' + width + '" height="' + height + '"/>';
+}
+const svgCircle = function(x, y, r, cssClass) {
+	if (cssClass === undefined) {
+		cssClass = '';
+	}
+	return '<circle cx="' + x + '" cy="' + y + '" r="' + r + '"/>';
+}
 const assembleGraph = function() {
 	const width = 300;
 	const height = 200;
@@ -222,9 +234,11 @@ app.get('/storage.svg', function (req, res) {
 });
 
 app.get('/graph.svg', function (req, res) {
-	graph.content = svgLine(50, 50, 50, 100, 'fat');
 	graph.height = 200;
 	graph.width = 300;
+	graph.content += svgLine(50, 50, 50, 100, 'fat');
+	graph.content += svgRect(100, 50, 300, 30, 'fat');
+	graph.content += svgCircle(250, 30, 20, 'fat');
 
 	res.contentType('image/svg+xml');
 	var content = fs.readFileSync(svgGraph);
