@@ -23,6 +23,9 @@ const TEMPLATING_SIGN_BEGIN = '__{{';
 const TEMPLATING_SIGN_END = '}}__';
 const TEMPLATING_REGEX = /__\{\{\S*\}\}__/g;
 const NUM_SENSORS = 5;
+
+//color
+//====================================================
 const RGB_TEMP_MIN = 10;
 const RGB_TEMP_MAX = 80;
 const RGB_TEMP_DIFF = RGB_TEMP_MAX - RGB_TEMP_MIN
@@ -36,6 +39,9 @@ const calcRGB = function(rgb_temperature) {
 	var rgb_red = Math.round((rgb_temperature - RGB_TEMP_MIN) * RGBPerTemp);
 	return rgb_red + ', 0, ' + (255 - rgb_red); 	
 };
+
+//templating
+//====================================================
 const assemblePage = function(fileToEmbed) {
 	var content = fs.readFileSync(fileHeader, 'utf-8') + fs.readFileSync(fileToEmbed, 'utf-8') + fs.readFileSync(fileFooter, 'utf-8');
 	return content;
@@ -53,6 +59,9 @@ const fillWithVariables = function(string, variables) { //http://www.w3schools.c
 	}
 	return string;
 };
+
+//embedded
+//====================================================
 const toggleLED = function() {
 	statusLED = 1 - statusLED;	
 	fs.writeFileSync(fileLED, statusLED);
@@ -77,6 +86,26 @@ const updateTempCPU = function() {
 		properties.cpu_temp = temp;
 	});
 };
+
+//svg
+//====================================================
+const svgLine = function(x1, y1, x2, y2, cssClass) {
+	if (cssClass === undefined) {
+		cssClass = '';
+	}
+	return '<line x1="' + x1 + '" y1="' + y1 + '" x2="' + x2 + '" y2="' + y2 + '" class="' + cssClass + '"/>';
+}
+const assembleGraph = function() {
+	const width = 300;
+	const height = 200;
+	const temp_max = -20;
+	const temp_min = 100;
+	const temp_steps = 10;
+	const time_start = 0;
+	const time_stop = 0;
+	const time_steps = 0;
+}
+
 //global variables
 //====================================================
 
@@ -98,6 +127,11 @@ var storage = {
 	rgb_top: "255, 255, 255",
 	rgb_mid: "255, 255, 255",
 	rgb_bot: "255, 255, 255"
+};
+var graph = {
+	content: "N/A",
+	height: 0,
+	width: 0
 };
 var pinsIndex = { //Object
 	LED: 0,
@@ -188,8 +222,13 @@ app.get('/storage.svg', function (req, res) {
 });
 
 app.get('/graph.svg', function (req, res) {
+	graph.content = svgLine(50, 50, 50, 100, 'fat');
+	graph.height = 200;
+	graph.width = 300;
+
 	res.contentType('image/svg+xml');
 	var content = fs.readFileSync(svgGraph);
+	content = fillWithVariables(content, graph);
 	res.send(content);
 });
 
