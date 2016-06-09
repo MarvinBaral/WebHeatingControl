@@ -95,6 +95,11 @@ const updateTempCPU = function() {
 
 //svg
 //====================================================
+var graph = {
+	content: "",
+	height: 0,
+	width: 0
+};
 const svgLine = function(x1, y1, x2, y2, cssClass) {
 	if (cssClass === undefined) {
 		cssClass = '';
@@ -113,16 +118,45 @@ const svgCircle = function(x, y, r, cssClass) {
 	}
 	return '<circle cx="' + x + '" cy="' + y + '" r="' + r + '" class="' + cssClass + '"/>';
 }
-const assembleGraph = function() {
-	const width = 300;
-	const height = 200;
-	const temp_max = -20;
-	const temp_min = 100;
-	const temp_steps = 10;
-	const time_start = 0;
-	const time_stop = 0;
-	const time_steps = 0;
+const svgText = function(x, y, text, cssClass) {
+	if (cssClass === undefined) {
+		cssClass = '';
+	}
+	return '<text x="' + x + '" y="' + y + '" class="' + cssClass + '">' + text + '</text>';
 }
+const assembleGraph = function() {
+	//temp
+	const temp_min = -20;
+	const temp_max = 100;
+	const temp_steps = 10;
+
+	//general
+	const drawingArea_margin_percent = 10;
+	const drawingArea_size_percent = 100 - (2 * drawingArea_margin_percent);
+	const NUM_HORIZONTAL_LINES = (temp_max - temp_min) / temp_steps;
+	const PERCENT_PER_HORIZONTAL_LINE = drawingArea_size_percent / NUM_HORIZONTAL_LINES;
+	const label_steps = 2; //e.g. 2 means: only every 2nd line has a label
+	const label_annex = ' °C';
+	const label_start_value = temp_min;
+	const label_end_value = temp_max;
+	const label_step_value = temp_steps;
+	const label_offset = -5;
+	var label_value = label_end_value;
+
+	graph.height = 600;
+	graph.width = 800;
+	graph.content += svgRect(drawingArea_margin_percent + '%', drawingArea_margin_percent + '%', drawingArea_size_percent + '%' , drawingArea_size_percent + '%', 'drawingArea');
+
+	for (var i = 0; i <= NUM_HORIZONTAL_LINES; i++) {
+		var height = drawingArea_margin_percent + i * PERCENT_PER_HORIZONTAL_LINE; 
+		if (i % label_steps == 0) {
+			graph.content += svgText((drawingArea_margin_percent + label_offset) + '%', height + '%', label_value + label_annex);
+		}
+		graph.content += svgLine(drawingArea_margin_percent + '%', height + '%', (100 - drawingArea_margin_percent) + '%', height + '%');
+		label_value -= label_step_value;
+	} 
+}
+assembleGraph();
 
 //global variables
 //====================================================
@@ -145,11 +179,6 @@ var storage = {
 	rgb_top: "255, 255, 255",
 	rgb_mid: "255, 255, 255",
 	rgb_bot: "255, 255, 255"
-};
-var graph = {
-	content: "N/A",
-	height: 0,
-	width: 0
 };
 var pinsIndex = { //Object
 	LED: 0,
@@ -240,12 +269,6 @@ app.get('/storage.svg', function (req, res) {
 });
 
 app.get('/graph.svg', function (req, res) {
-	graph.height = 200;
-	graph.width = 300;
-	graph.content += svgLine(50, 50, 50, 100, 'fat');
-	graph.content += svgRect(100, 50, 300, 30, 'drawingArea');
-	graph.content += svgCircle(250, 30, 20, 'fat');
-
 	res.contentType('image/svg+xml');
 	var content = fs.readFileSync(svgGraph);
 	content = fillWithVariables(content, graph);
