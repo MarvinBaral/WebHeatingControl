@@ -141,18 +141,25 @@ const assembleGraph = function() {
 	const label_end_value = temp_max;
 	const label_step_value = temp_steps;
 	const label_offset = -5;
+	const label_fontsize = 3; //per cent
 	var label_value = label_end_value;
 
 	graph.height = 600;
-	graph.width = 800;
+	graph.width = 1200;
 	graph.content += svgRect(drawingArea_margin_percent + '%', drawingArea_margin_percent + '%', drawingArea_size_percent + '%' , drawingArea_size_percent + '%', 'drawingArea');
 
+	var cssClass = "";
 	for (var i = 0; i <= NUM_HORIZONTAL_LINES; i++) {
 		var height = drawingArea_margin_percent + i * PERCENT_PER_HORIZONTAL_LINE; 
 		if (i % label_steps == 0) {
-			graph.content += svgText((drawingArea_margin_percent + label_offset) + '%', height + '%', label_value + label_annex);
+			graph.content += svgText((drawingArea_margin_percent + label_offset) + '%', (height + label_fontsize / 2) + '%', label_value + label_annex);
 		}
-		graph.content += svgLine(drawingArea_margin_percent + '%', height + '%', (100 - drawingArea_margin_percent) + '%', height + '%');
+		if (label_value == 0) {
+			cssClass = "fat";
+		} else {
+			cssClass = "";
+		}
+		graph.content += svgLine(drawingArea_margin_percent + '%', height + '%', (100 - drawingArea_margin_percent) + '%', height + '%', cssClass);
 		label_value -= label_step_value;
 	} 
 }
