@@ -3,7 +3,7 @@
   "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 
 <svg xmlns="http://www.w3.org/2000/svg"
-xmlns:xlink="http://www.w3.org/1999/xlink" width="250" height="400">
+xmlns:xlink="http://www.w3.org/1999/xlink" width="__{{width}}__" height="__{{height}}__">
 	<style type="text/css" >
 		<![CDATA[
 			text {
