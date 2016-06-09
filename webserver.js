@@ -99,48 +99,45 @@ var graph = {
 	content: "",
 	height: 0,
 	width: 0,
-	pDrawingArea_margin: 10,
+	pDrawingArea_margin: 0,
 	pDrawingArea_size: 0,
-	init: function() {
+	value_min: 0,
+	value_max: 0,
+	value_steps: 0,
+	label_annex: "",
+	init: function(pValue_min, pValue_max, pValue_steps, pValue_annex) {
 		this.height = 600;
 		this.width = 1200;
+		this.pDrawingArea_margin = 10;
 		this.pDrawingArea_size = (100 - (2 * this.pDrawingArea_margin));
+		this.value_min = pValue_min;
+		this.value_max = pValue_max;
+		this.value_steps = pValue_steps;
+		this.label_annex = pValue_annex;
 	},
 	initGraph: function() {
-		//temp
-		const temp_min = -20;
-		const temp_max = 100;
-		const temp_steps = 10;
-
-		//general
-		const drawingArea_margin_percent = this.pDrawingArea_margin;
-		const drawingArea_size_percent = this.pDrawingArea_size;
-		const NUM_HORIZONTAL_LINES = (temp_max - temp_min) / temp_steps;
-		const PERCENT_PER_HORIZONTAL_LINE = drawingArea_size_percent / NUM_HORIZONTAL_LINES;
+		const NUM_HORIZONTAL_LINES = (this.value_max - this.value_min) / this.value_steps;
+		const PERCENT_PER_HORIZONTAL_LINE = this.pDrawingArea_size / NUM_HORIZONTAL_LINES;
 		const label_steps = 2; //e.g. 2 means: only every 2nd line has a label
-		const label_annex = ' °C';
-		const label_start_value = temp_min;
-		const label_end_value = temp_max;
-		const label_step_value = temp_steps;
 		const label_offset = -5;
 		const label_fontsize = 3; //per cent
-		var label_value = label_end_value;
-
-		graph.content += graph.svgRect(drawingArea_margin_percent + '%', drawingArea_margin_percent + '%', drawingArea_size_percent + '%' , drawingArea_size_percent + '%', 'drawingArea');
-
+		var label_value = this.value_max;
 		var cssClass = "";
+
+		graph.content += graph.svgRect(this.pDrawingArea_margin + '%', this.pDrawingArea_margin + '%', this.pDrawingArea_size + '%' , this.pDrawingArea_size + '%', 'drawingArea');
+
 		for (var i = 0; i <= NUM_HORIZONTAL_LINES; i++) {
-			var height = drawingArea_margin_percent + i * PERCENT_PER_HORIZONTAL_LINE; 
+			var height = this.pDrawingArea_margin + i * PERCENT_PER_HORIZONTAL_LINE; 
 			if (i % label_steps == 0) {
-				graph.content += graph.svgText((drawingArea_margin_percent + label_offset) + '%', (height + label_fontsize / 2) + '%', label_value + label_annex);
+				graph.content += graph.svgText((this.pDrawingArea_margin + label_offset) + '%', (height + label_fontsize / 2) + '%', label_value + this.label_annex);
 			}
 			if (label_value == 0) {
 				cssClass = "fat";
 			} else {
 				cssClass = "";
 			}
-			graph.content += graph.svgLine(drawingArea_margin_percent + '%', height + '%', (100 - drawingArea_margin_percent) + '%', height + '%', cssClass);
-			label_value -= label_step_value;
+			graph.content += graph.svgLine(this.pDrawingArea_margin + '%', height + '%', (100 - this.pDrawingArea_margin) + '%', height + '%', cssClass);
+			label_value -= this.value_steps;
 		} 
 	},
 	svgLine: function(x1, y1, x2, y2, cssClass) {
@@ -169,7 +166,7 @@ var graph = {
 	},
 	drawValues: function(values) {}	
 };
-graph.init();
+graph.init(-20, 100, 10, '°C');
 graph.initGraph();
 
 //global variables
