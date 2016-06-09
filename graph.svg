@@ -28,7 +28,9 @@ xmlns:xlink="http://www.w3.org/1999/xlink" width="__{{width}}__" height="__{{hei
 				fill: red;
 			}
 			polyline {
-				fill: red;
+				stroke: red;
+				stroke-width: 2px;
+				fill: none;
 			}
 		]]>
 	</style>

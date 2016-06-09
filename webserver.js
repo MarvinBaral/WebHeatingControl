@@ -103,6 +103,7 @@ var graph = {
 	pDrawingArea_size: 0,
 	value_min: 0,
 	value_max: 0,
+	value_diff: 0,
 	value_steps: 0,
 	label_annex: "",
 	init: function(pValue_min, pValue_max, pValue_steps, pValue_annex) {
@@ -112,6 +113,7 @@ var graph = {
 		this.pDrawingArea_size = (100 - (2 * this.pDrawingArea_margin));
 		this.value_min = pValue_min;
 		this.value_max = pValue_max;
+		this.value_diff = this.value_max - this.value_min;
 		this.value_steps = pValue_steps;
 		this.label_annex = pValue_annex;
 	},
@@ -164,10 +166,34 @@ var graph = {
 		}
 		return '<text x="' + x + '" y="' + y + '" class="' + cssClass + '">' + text + '</text>';
 	},
-	drawValues: function(values) {}	
+	svgPolyline: function(points, cssClass) {
+		if (cssClass === undefined) {
+			cssClass = '';
+		}
+		var sPoints = "";
+		for (var i = 0; i < points.length; i++) {
+			sPoints += points[i][0] + ',' + points[i][1] + ' ';
+		}
+		return '<polyline points="' + sPoints + '" class="' + cssClass + '"/>';
+	},
+	drawValues: function(values) {
+		const absolute_margin_x = this.pDrawingArea_margin / 100 * this.width;
+		const absolute_margin_y = this.pDrawingArea_margin / 100 * this.height;
+		const absolute_width = this.pDrawingArea_size / 100 * this.width;
+		const absolute_height = this.pDrawingArea_size / 100 * this.height;
+		var points = new Array();
+		for (var i = 0; i < values.length; i++) {
+			points[i] = new Array();
+			points[i][0] = (absolute_margin_x + i / (values.length - 1) * absolute_width);
+			points[i][1] = (this.height - (absolute_margin_y + (values[i] - this.value_min) / this.value_diff * absolute_height));
+			this.content += this.svgCircle(points[i][0], points[i][1], 5);
+		}
+		this.content += this.svgPolyline(points);
+	}	
 };
 graph.init(-20, 100, 10, '°C');
 graph.initGraph();
+graph.drawValues([1,78,45,34,23,12,0,-20,93,100,100,100]);
 
 //global variables
 //====================================================
