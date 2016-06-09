@@ -98,72 +98,73 @@ const updateTempCPU = function() {
 var graph = {
 	content: "",
 	height: 0,
-	width: 0
+	width: 0,
+	initGraph: function() {
+		//temp
+		const temp_min = -20;
+		const temp_max = 100;
+		const temp_steps = 10;
+
+		//general
+		const drawingArea_margin_percent = 10;
+		const drawingArea_size_percent = 100 - (2 * drawingArea_margin_percent);
+		const NUM_HORIZONTAL_LINES = (temp_max - temp_min) / temp_steps;
+		const PERCENT_PER_HORIZONTAL_LINE = drawingArea_size_percent / NUM_HORIZONTAL_LINES;
+		const label_steps = 2; //e.g. 2 means: only every 2nd line has a label
+		const label_annex = ' °C';
+		const label_start_value = temp_min;
+		const label_end_value = temp_max;
+		const label_step_value = temp_steps;
+		const label_offset = -5;
+		const label_fontsize = 3; //per cent
+		var label_value = label_end_value;
+
+		graph.height = 600;
+		graph.width = 1200;
+		graph.content += graph.svgRect(drawingArea_margin_percent + '%', drawingArea_margin_percent + '%', drawingArea_size_percent + '%' , drawingArea_size_percent + '%', 'drawingArea');
+
+		var cssClass = "";
+		for (var i = 0; i <= NUM_HORIZONTAL_LINES; i++) {
+			var height = drawingArea_margin_percent + i * PERCENT_PER_HORIZONTAL_LINE; 
+			if (i % label_steps == 0) {
+				graph.content += graph.svgText((drawingArea_margin_percent + label_offset) + '%', (height + label_fontsize / 2) + '%', label_value + label_annex);
+			}
+			if (label_value == 0) {
+				cssClass = "fat";
+			} else {
+				cssClass = "";
+			}
+			graph.content += graph.svgLine(drawingArea_margin_percent + '%', height + '%', (100 - drawingArea_margin_percent) + '%', height + '%', cssClass);
+			label_value -= label_step_value;
+		} 
+	},
+	svgLine: function(x1, y1, x2, y2, cssClass) {
+		if (cssClass === undefined) {
+			cssClass = '';
+		}
+		return '<line x1="' + x1 + '" y1="' + y1 + '" x2="' + x2 + '" y2="' + y2 + '" class="' + cssClass + '"/>';
+	},
+	svgRect: function(x, y, width, height, cssClass) {
+		if (cssClass === undefined) {
+			cssClass = '';
+		}
+		return '<rect x="' + x + '" y="' + y + '" width="' + width + '" height="' + height + '" class="' + cssClass + '"/>';
+	},
+	svgCircle: function(x, y, r, cssClass) {
+		if (cssClass === undefined) {
+			cssClass = '';
+		}
+		return '<circle cx="' + x + '" cy="' + y + '" r="' + r + '" class="' + cssClass + '"/>';
+	},
+	svgText: function(x, y, text, cssClass) {
+		if (cssClass === undefined) {
+			cssClass = '';
+		}
+		return '<text x="' + x + '" y="' + y + '" class="' + cssClass + '">' + text + '</text>';
+	},
+	drawValues: function(values) {}	
 };
-const svgLine = function(x1, y1, x2, y2, cssClass) {
-	if (cssClass === undefined) {
-		cssClass = '';
-	}
-	return '<line x1="' + x1 + '" y1="' + y1 + '" x2="' + x2 + '" y2="' + y2 + '" class="' + cssClass + '"/>';
-}
-const svgRect = function(x, y, width, height, cssClass) {
-	if (cssClass === undefined) {
-		cssClass = '';
-	}
-	return '<rect x="' + x + '" y="' + y + '" width="' + width + '" height="' + height + '" class="' + cssClass + '"/>';
-}
-const svgCircle = function(x, y, r, cssClass) {
-	if (cssClass === undefined) {
-		cssClass = '';
-	}
-	return '<circle cx="' + x + '" cy="' + y + '" r="' + r + '" class="' + cssClass + '"/>';
-}
-const svgText = function(x, y, text, cssClass) {
-	if (cssClass === undefined) {
-		cssClass = '';
-	}
-	return '<text x="' + x + '" y="' + y + '" class="' + cssClass + '">' + text + '</text>';
-}
-const assembleGraph = function() {
-	//temp
-	const temp_min = -20;
-	const temp_max = 100;
-	const temp_steps = 10;
-
-	//general
-	const drawingArea_margin_percent = 10;
-	const drawingArea_size_percent = 100 - (2 * drawingArea_margin_percent);
-	const NUM_HORIZONTAL_LINES = (temp_max - temp_min) / temp_steps;
-	const PERCENT_PER_HORIZONTAL_LINE = drawingArea_size_percent / NUM_HORIZONTAL_LINES;
-	const label_steps = 2; //e.g. 2 means: only every 2nd line has a label
-	const label_annex = ' °C';
-	const label_start_value = temp_min;
-	const label_end_value = temp_max;
-	const label_step_value = temp_steps;
-	const label_offset = -5;
-	const label_fontsize = 3; //per cent
-	var label_value = label_end_value;
-
-	graph.height = 600;
-	graph.width = 1200;
-	graph.content += svgRect(drawingArea_margin_percent + '%', drawingArea_margin_percent + '%', drawingArea_size_percent + '%' , drawingArea_size_percent + '%', 'drawingArea');
-
-	var cssClass = "";
-	for (var i = 0; i <= NUM_HORIZONTAL_LINES; i++) {
-		var height = drawingArea_margin_percent + i * PERCENT_PER_HORIZONTAL_LINE; 
-		if (i % label_steps == 0) {
-			graph.content += svgText((drawingArea_margin_percent + label_offset) + '%', (height + label_fontsize / 2) + '%', label_value + label_annex);
-		}
-		if (label_value == 0) {
-			cssClass = "fat";
-		} else {
-			cssClass = "";
-		}
-		graph.content += svgLine(drawingArea_margin_percent + '%', height + '%', (100 - drawingArea_margin_percent) + '%', height + '%', cssClass);
-		label_value -= label_step_value;
-	} 
-}
-assembleGraph();
+graph.initGraph();
 
 //global variables
 //====================================================
