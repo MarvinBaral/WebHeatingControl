@@ -99,6 +99,13 @@ var graph = {
 	content: "",
 	height: 0,
 	width: 0,
+	pDrawingArea_margin: 10,
+	pDrawingArea_size: 0,
+	init: function() {
+		this.height = 600;
+		this.width = 1200;
+		this.pDrawingArea_size = (100 - (2 * this.pDrawingArea_margin));
+	},
 	initGraph: function() {
 		//temp
 		const temp_min = -20;
@@ -106,8 +113,8 @@ var graph = {
 		const temp_steps = 10;
 
 		//general
-		const drawingArea_margin_percent = 10;
-		const drawingArea_size_percent = 100 - (2 * drawingArea_margin_percent);
+		const drawingArea_margin_percent = this.pDrawingArea_margin;
+		const drawingArea_size_percent = this.pDrawingArea_size;
 		const NUM_HORIZONTAL_LINES = (temp_max - temp_min) / temp_steps;
 		const PERCENT_PER_HORIZONTAL_LINE = drawingArea_size_percent / NUM_HORIZONTAL_LINES;
 		const label_steps = 2; //e.g. 2 means: only every 2nd line has a label
@@ -119,8 +126,6 @@ var graph = {
 		const label_fontsize = 3; //per cent
 		var label_value = label_end_value;
 
-		graph.height = 600;
-		graph.width = 1200;
 		graph.content += graph.svgRect(drawingArea_margin_percent + '%', drawingArea_margin_percent + '%', drawingArea_size_percent + '%' , drawingArea_size_percent + '%', 'drawingArea');
 
 		var cssClass = "";
@@ -164,6 +169,7 @@ var graph = {
 	},
 	drawValues: function(values) {}	
 };
+graph.init();
 graph.initGraph();
 
 //global variables
