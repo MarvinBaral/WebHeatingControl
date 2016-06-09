@@ -2,7 +2,11 @@
 
 //webserver to control a heating
 
-//global constants
+//general
+//====================================================
+const NUM_SENSORS = 5;
+
+//modules
 //====================================================
 
 const express = require('express');
@@ -11,6 +15,9 @@ const bodyParser = require('body-parser');
 const fs = require('fs'); //file-system
 const exec = require('shelljs').exec;
 const serial = require('serialport-js');
+
+//paths
+//====================================================
 const rootDir = '/root/heating/'
 const fileHeader = rootDir + 'header.html';
 const fileFooter = rootDir + 'footer.html';
@@ -19,10 +26,6 @@ const fileLED = '/sys/class/leds/led0/brightness'; //for RaspberryPi
 const dirGPIO = 'sys/class/gpio/';
 const svgStorage = rootDir + 'storage.svg';
 const svgGraph = rootDir + 'graph.svg';
-const TEMPLATING_SIGN_BEGIN = '__{{';
-const TEMPLATING_SIGN_END = '}}__';
-const TEMPLATING_REGEX = /__\{\{\S*\}\}__/g;
-const NUM_SENSORS = 5;
 
 //color
 //====================================================
@@ -42,6 +45,9 @@ const calcRGB = function(rgb_temperature) {
 
 //templating
 //====================================================
+const TEMPLATING_SIGN_BEGIN = '__{{';
+const TEMPLATING_SIGN_END = '}}__';
+const TEMPLATING_REGEX = /__\{\{\S*\}\}__/g;
 const assemblePage = function(fileToEmbed) {
 	var content = fs.readFileSync(fileHeader, 'utf-8') + fs.readFileSync(fileToEmbed, 'utf-8') + fs.readFileSync(fileFooter, 'utf-8');
 	return content;
