@@ -90,6 +90,11 @@ const updateTempCPU = function() {
 		temp = temp.replace('temp=', '');
 		temp = temp.replace("'C", '');
 		properties.cpu_temp = temp;
+		testArray.push(temp);
+		console.log(testArray);
+		if (testArray.length > 20) {
+			testArray.shift();
+		}
 	});
 };
 
@@ -189,15 +194,19 @@ var graph = {
 			this.content += this.svgCircle(points[i][0], points[i][1], 5);
 		}
 		this.content += this.svgPolyline(points);
+	},
+	drawGraph: function(values) {
+		this.content = "";
+		this.initGraph();
+		this.drawValues(values);
 	}	
 };
 graph.init(-20, 100, 10, '°C');
-graph.initGraph();
-graph.drawValues([1,78,45,34,23,12,0,-20,93,100,100,100]);
 
 //global variables
 //====================================================
 
+var testArray = new Array();
 var statusLED = 0;
 var properties = { //Object
 	cpu_temp: 0,
@@ -284,6 +293,11 @@ app.get('/', function (req, res) {
 	res.send(fillWithVariables(assemblePage(fileIndex), properties));
 });
 
+app.get('/*.html', function (req, res) {
+	res.contentType('text/html');
+	res.send(fillWithVariables(assemblePage(rootDir + req.path), properties));
+});
+
 app.get('/*.css', function (req, res) {
 	res.contentType('text/css');
 	var filename = req.path;
@@ -306,6 +320,7 @@ app.get('/storage.svg', function (req, res) {
 });
 
 app.get('/graph.svg', function (req, res) {
+	graph.drawGraph(testArray);
 	res.contentType('image/svg+xml');
 	var content = fs.readFileSync(svgGraph);
 	content = fillWithVariables(content, graph);
