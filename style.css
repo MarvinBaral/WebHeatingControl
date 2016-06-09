@@ -16,7 +16,7 @@ body div {
 	width: device-width;
 }
 
-img {
+img.right {
 	float: right;
 }
 
