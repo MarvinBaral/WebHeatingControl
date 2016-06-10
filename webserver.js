@@ -259,7 +259,7 @@ function start(port) {
 		var sData = data.toString();
 		console.log(sData);
 		var aData = sData.split(': ');
-		if (aData[0] < NUM_SENSORS) {
+		if (aData[0] < NUM_SENSORS && aData.length == 2 && !isNaN(aData[0]) && !isNaN(aData[1])) {
 			properties[sensors[aData[0]]] = aData[1];
 		}
 		
