@@ -91,7 +91,6 @@ const updateTempCPU = function() {
 		temp = temp.replace("'C", '');
 		properties.cpu_temp = temp;
 		testArray.push(temp);
-		console.log(testArray);
 		if (testArray.length > 20) {
 			testArray.shift();
 		}
