@@ -24,13 +24,45 @@ xmlns:xlink="http://www.w3.org/1999/xlink" width="__{{width}}__" height="__{{hei
 				stroke: white;
 				stroke-width: 3px;
 			}
-			circle {
+			circle.color0 {
 				fill: red;
 			}
+			circle.color1 {
+				fill: yellow;
+			}
+			circle.color2 {
+				fill: green;
+			}
+			circle.color3 {
+				fill: purple;
+			}
+			circle.color4 {
+				fill: silver;
+			}
+			circle.color5 {
+				fill: black;
+			}
 			polyline {
-				stroke: red;
 				stroke-width: 2px;
 				fill: none;
+			}
+			polyline.color0 {
+				stroke: red;
+			}
+			polyline.color1 {
+				stroke: yellow;
+			}
+			polyline.color2 {
+				stroke: green;
+			}
+			polyline.color3 {
+				stroke: purple;
+			}
+			polyline.color4 {
+				stroke: silver;
+			}
+			polyline.color5 {
+				stroke: black;
 			}
 		]]>
 	</style>
