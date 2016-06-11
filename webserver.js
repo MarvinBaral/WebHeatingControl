@@ -90,9 +90,9 @@ const updateTempCPU = function() {
 		temp = temp.replace('temp=', '');
 		temp = temp.replace("'C", '');
 		properties.cpu_temp = temp;
-		testArray.push(temp);
-		if (testArray.length > 20) {
-			testArray.shift();
+		testArray[0].push(temp);
+		if (testArray[0].length > 20) {
+			testArray[0].shift();
 		}
 	});
 };
@@ -180,7 +180,7 @@ var graph = {
 		}
 		return '<polyline points="' + sPoints + '" class="' + cssClass + '"/>';
 	},
-	drawValues: function(values) {
+	drawValues: function(values, colorIndex) {
 		const absolute_margin_x = this.pDrawingArea_margin / 100 * this.width;
 		const absolute_margin_y = this.pDrawingArea_margin / 100 * this.height;
 		const absolute_width = this.pDrawingArea_size / 100 * this.width;
@@ -190,14 +190,21 @@ var graph = {
 			points[i] = new Array();
 			points[i][0] = (absolute_margin_x + i / (values.length - 1) * absolute_width);
 			points[i][1] = (this.height - (absolute_margin_y + (values[i] - this.value_min) / this.value_diff * absolute_height));
-			this.content += this.svgCircle(points[i][0], points[i][1], 5);
+			this.content += this.svgCircle(points[i][0], points[i][1], 5, 'color' + colorIndex);
 		}
-		this.content += this.svgPolyline(points);
+		this.content += this.svgPolyline(points, 'color' + colorIndex);
 	},
 	drawGraph: function(values) {
 		this.content = "";
 		this.initGraph();
-		this.drawValues(values);
+		if (values[0].constructor === Array) {
+			console.log("is array!");
+			for (var i = 0; i < values.length; i++) {
+				this.drawValues(values[i], i);
+			}
+		} else {
+			this.drawValues(values, 0);
+		}
 	}	
 };
 graph.init(-20, 100, 10, '°C');
@@ -205,7 +212,15 @@ graph.init(-20, 100, 10, '°C');
 //global variables
 //====================================================
 
-var testArray = new Array();
+const arrayLength = 20;
+var testArray = new Array(6);
+testArray[0] = new Array(arrayLength);
+testArray[1] = new Array(arrayLength);
+testArray[2] = new Array(arrayLength);
+testArray[3] = new Array(arrayLength);
+testArray[4] = new Array(arrayLength);
+testArray[5] = new Array(arrayLength);
+
 var statusLED = 0;
 var properties = { //Object
 	cpu_temp: 0,
@@ -259,10 +274,16 @@ function start(port) {
 		var sData = data.toString();
 		console.log(sData);
 		var aData = sData.split(': ');
-		if (aData[0] < NUM_SENSORS && aData.length == 2 && !isNaN(aData[0]) && !isNaN(aData[1])) {
+		if (aData[0] < NUM_SENSORS && aData.length == 2 && !isNaN(aData[0]) && !isNaN(aData[1]) && aData[1] !== undefined) {
+			aData[0] = parseInt(aData[0]);
+			aData[1] = parseInt(aData[1]);
 			properties[sensors[aData[0]]] = aData[1];
+			var index = aData[0] + 1;
+			testArray[index].push(aData[1]);
+			if (testArray[index].length > 20) {
+				testArray[index].shift();
+			}
 		}
-		
 	});
 };
  
