@@ -110,6 +110,7 @@ var graph = {
 	value_diff: 0,
 	value_steps: 0,
 	label_annex: "",
+	circle_radius: 5,
 	init: function(pValue_min, pValue_max, pValue_steps, pValue_annex) {
 		this.height = 600;
 		this.width = 1200;
@@ -190,7 +191,7 @@ var graph = {
 			points[i] = new Array();
 			points[i][0] = (absolute_margin_x + i / (values.length - 1) * absolute_width);
 			points[i][1] = (this.height - (absolute_margin_y + (values[i] - this.value_min) / this.value_diff * absolute_height));
-			this.content += this.svgCircle(points[i][0], points[i][1], 5, 'color' + colorIndex);
+			this.content += this.svgCircle(points[i][0], points[i][1], this.circle_radius, 'color' + colorIndex);
 		}
 		this.content += this.svgPolyline(points, 'color' + colorIndex);
 	},
