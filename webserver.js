@@ -198,7 +198,6 @@ var graph = {
 		this.content = "";
 		this.initGraph();
 		if (values[0].constructor === Array) {
-			console.log("is array!");
 			for (var i = 0; i < values.length; i++) {
 				this.drawValues(values[i], i);
 			}
