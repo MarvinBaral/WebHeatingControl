@@ -110,8 +110,9 @@ var graph = {
 	value_diff: 0,
 	value_steps: 0,
 	label_annex: "",
+	label_steps: 1,
 	circle_radius: 5,
-	init: function(pValue_min, pValue_max, pValue_steps, pValue_annex) {
+	init: function(pValue_min, pValue_max, pValue_steps, pLabel_steps, pLabel_annex) {
 		this.height = 600;
 		this.width = 1200;
 		this.pDrawingArea_margin = 10;
@@ -120,12 +121,12 @@ var graph = {
 		this.value_max = pValue_max;
 		this.value_diff = this.value_max - this.value_min;
 		this.value_steps = pValue_steps;
-		this.label_annex = pValue_annex;
+		this.label_annex = pLabel_annex;
+		this.label_steps = pLabel_steps;
 	},
 	initGraph: function() {
 		const NUM_HORIZONTAL_LINES = (this.value_max - this.value_min) / this.value_steps;
 		const PERCENT_PER_HORIZONTAL_LINE = this.pDrawingArea_size / NUM_HORIZONTAL_LINES;
-		const label_steps = 2; //e.g. 2 means: only every 2nd line has a label
 		const label_offset = -5;
 		const label_fontsize = 3; //per cent
 		var label_value = this.value_max;
@@ -135,7 +136,7 @@ var graph = {
 
 		for (var i = 0; i <= NUM_HORIZONTAL_LINES; i++) {
 			var height = this.pDrawingArea_margin + i * PERCENT_PER_HORIZONTAL_LINE; 
-			if (i % label_steps == 0) {
+			if (i % this.label_steps == 0) {
 				graph.content += graph.svgText((this.pDrawingArea_margin + label_offset) + '%', (height + label_fontsize / 2) + '%', label_value + this.label_annex);
 			}
 			if (label_value == 0) {
@@ -207,7 +208,7 @@ var graph = {
 		}
 	}	
 };
-graph.init(-20, 100, 10, '°C');
+graph.init(-10, 80, 10, 1, '°C');
 
 //global variables
 //====================================================
