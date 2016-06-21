@@ -314,6 +314,13 @@ app.get('/', function (req, res) {
 	res.send(fillWithVariables(assemblePage(fileIndex), properties));
 });
 
+app.get('/dir', function (req, res) {
+	fs.mkdirSync(rootDir + 'Year/');
+	fs.mkdirSync(rootDir + 'Year/Month/');
+	fs.writeFileSync(rootDir + 'Year/Month/day.txt', 'testcontent');
+	res.sendFile(rootDir + 'Year/Month/day.txt');
+});
+
 app.get('/*.html', function (req, res) {
 	res.contentType('text/html');
 	res.send(fillWithVariables(assemblePage(rootDir + req.path), properties));
