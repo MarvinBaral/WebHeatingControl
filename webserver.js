@@ -25,8 +25,9 @@ const fileFooter = httpRootDir + 'footer.html';
 const fileIndex = httpRootDir + 'index.html';
 const fileLED = '/sys/class/leds/led0/brightness'; //for RaspberryPi
 const dirGPIO = 'sys/class/gpio/';
-const svgStorage = httpRootDir + 'storage.svg';
-const svgGraph = httpRootDir + 'graph.svg';
+const svgDir = httpRootDir;
+const svgStorage = svgDir + 'storage.svg';
+const svgGraph = svgDir + 'graph.svg';
 
 //color
 //====================================================
@@ -242,6 +243,12 @@ var storage = {
 	rgb_mid: "255, 255, 255",
 	rgb_bot: "255, 255, 255"
 };
+var legend = {
+	temp_min: 0,
+	temp_max: 0,
+	rgb_min: "255, 255, 255",
+	rgb_max: "255, 255, 255"
+};
 var pinsIndex = { //Object
 	LED: 0,
 	pump: 1,
@@ -344,6 +351,19 @@ app.get('/storage.svg', function (req, res) {
 	res.contentType('image/svg+xml');
 	var content = fs.readFileSync(svgStorage);
 	content = fillWithVariables(content, storage);
+
+	res.send(content);
+});
+
+app.get('/legend.svg', function (req, res) {
+	legend.temp_min = RGB_TEMP_MIN;
+	legend.temp_max = RGB_TEMP_MAX;
+	legend.rgb_min = calcRGB(legend.temp_min);
+	legend.rgb_max = calcRGB(legend.temp_max);
+	
+	res.contentType('image/svg+xml');
+	var content = fs.readFileSync(svgDir + 'legend.svg');
+	content = fillWithVariables(content, legend);
 
 	res.send(content);
 });
