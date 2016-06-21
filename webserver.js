@@ -18,14 +18,15 @@ const serial = require('serialport-js');
 
 //paths
 //====================================================
-const rootDir = '/root/heating/'
-const fileHeader = rootDir + 'header.html';
-const fileFooter = rootDir + 'footer.html';
-const fileIndex = rootDir + 'index.html';
+const rootDir = '/root/heating/';
+const httpRootDir = rootDir + 'http/';
+const fileHeader = httpRootDir + 'header.html';
+const fileFooter = httpRootDir + 'footer.html';
+const fileIndex = httpRootDir + 'index.html';
 const fileLED = '/sys/class/leds/led0/brightness'; //for RaspberryPi
 const dirGPIO = 'sys/class/gpio/';
-const svgStorage = rootDir + 'storage.svg';
-const svgGraph = rootDir + 'graph.svg';
+const svgStorage = httpRootDir + 'storage.svg';
+const svgGraph = httpRootDir + 'graph.svg';
 
 //color
 //====================================================
@@ -323,13 +324,13 @@ app.get('/dir', function (req, res) {
 
 app.get('/*.html', function (req, res) {
 	res.contentType('text/html');
-	res.send(fillWithVariables(assemblePage(rootDir + req.path), properties));
+	res.send(fillWithVariables(assemblePage(httpRootDir + req.path), properties));
 });
 
 app.get('/*.css', function (req, res) {
 	res.contentType('text/css');
 	var filename = req.path;
-	res.sendFile(rootDir + filename);
+	res.sendFile(httpRootDir + filename);
 });
 
 app.get('/storage.svg', function (req, res) {
