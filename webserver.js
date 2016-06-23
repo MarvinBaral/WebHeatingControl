@@ -308,6 +308,10 @@ for (i = 0; i < pins.length; i++) {
 
 var main = function () {
 	updateTempCPU();
+
+	//set hardware pins
+	writeGPIO(pins[pinsIndex.burner], properties.burner_status);
+	writeGPIO(pins[pinsIndex.pump], properties.pump_status);
 	toggleLED(); //to visualize activity (like heartbeat, but only for this application)
 };
 setInterval(main, 1000);
@@ -378,14 +382,12 @@ app.get('/graph.svg', function (req, res) {
 
 app.all('/pump', function (req, res) {
 	properties.pump_status = 1 - properties.pump_status;
-	writeGPIO(pins[pinsIndex.pump], properties.pump_status);
 	console.log('pump');
 	res.redirect(303, '/');
 });
 
 app.all('/burn', function (req, res) {
 	properties.burner_status = 1 - properties.burner_status;
-	writeGPIO(pins[pinsIndex.burner], properties.burner_status);
 	console.log('burn');
 	res.redirect(303, '/');
 });
