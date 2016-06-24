@@ -86,13 +86,37 @@ const writeGPIO = function(gpio, value) {
 const readGPIO = function(gpio) {
 	return fs.readFileSync(dirGPIO + 'gpio' + gpio + '/' + 'value');
 };
+var tempsCPU = Array(20);
+var ctrTempCPU = -1;
 const updateTempCPU = function() {
 	exec('/opt/vc/bin/vcgencmd measure_temp', function (error, stdout, stderr) {
 		var temp = stdout;
 		temp = temp.replace('temp=', '');
 		temp = temp.replace("'C", '');
-		properties.cpu_temp = temp;
-		testArray[0].push(temp);
+
+		//handle the array
+		if (ctrTempCPU == -1) {
+			for (var i = 0; i < tempsCPU.length; i++) {
+				tempsCPU[i] = temp;	
+			}
+		}
+		ctrTempCPU++;
+		if (ctrTempCPU >= tempsCPU.length) {
+			ctrTempCPU = 0;
+		}
+		tempsCPU[ctrTempCPU] = temp;
+
+		//calc over time average
+		var avgTemp = 0;
+		for (var i = 0; i < tempsCPU.length; i++) {
+			avgTemp += parseFloat(tempsCPU[i]);
+		}
+		avgTemp /= tempsCPU.length;
+		avgTemp = avgTemp.toFixed(1); //fixed number of digits after comma
+		console.log(avgTemp);
+
+		properties.cpu_temp = avgTemp;
+		testArray[0].push(avgTemp);
 		if (testArray[0].length > 20) {
 			testArray[0].shift();
 		}
