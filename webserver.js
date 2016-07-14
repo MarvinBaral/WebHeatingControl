@@ -24,7 +24,7 @@ const fileHeader = httpRootDir + 'header.html';
 const fileFooter = httpRootDir + 'footer.html';
 const fileIndex = httpRootDir + 'index.html';
 const fileLED = '/sys/class/leds/led0/brightness'; //for RaspberryPi
-const dirGPIO = 'sys/class/gpio/';
+const dirGPIO = '/sys/class/gpio/';
 const svgDir = httpRootDir;
 const svgStorage = svgDir + 'storage.svg';
 const svgGraph = svgDir + 'graph.svg';
@@ -331,11 +331,13 @@ for (i = 0; i < pins.length; i++) {
 //====================================================
 
 var main = function () {
+	//update inputs
 	updateTempCPU();
 
-	//set hardware pins
+	//set outputs (hardware pins)
 	writeGPIO(pins[pinsIndex.burner], properties.burner_status);
 	writeGPIO(pins[pinsIndex.pump], properties.pump_status);
+	
 	toggleLED(); //to visualize activity (like heartbeat, but only for this application)
 };
 setInterval(main, 1000);
