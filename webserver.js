@@ -315,7 +315,7 @@ function start(port) {
 		var aData = sData.split(': ');
 		if (aData[0] < 9 && aData.length == 2 && !isNaN(aData[0]) && !isNaN(aData[1]) && aData[1] !== undefined) {
 			aData[0] = parseInt(aData[0]);
-			aData[1] = parseInt(aData[1]);
+			aData[1] = parseFloat(aData[1]).toFixed(1);
 			properties[sensors[aData[0]]] = aData[1];
 			if (aData[0] < NUM_SENSORS) {
 				var index = aData[0] + 1;
