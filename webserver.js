@@ -258,6 +258,7 @@ var properties = { //Object
 	temp_storage_mid: 0,
 	temp_storage_bot: 0,
 	temp_to_heating_circle: 0,
+	temp_to_burner: 0,
 	temp_from_burner: 0
 };
 var storage = {
@@ -292,7 +293,7 @@ var sensors = [ //mapping of indexes to positions
 	'temp_to_heating_circle',
 	'',
 	'',
-	'',
+	'temp_to_burner',
 	'temp_from_burner'
 ];
 
