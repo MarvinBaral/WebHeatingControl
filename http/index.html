@@ -4,6 +4,7 @@
 <h1>Heizungssteuerung:</h1>
 
 <img src="storage.svg" alt="svg-Bild des Speichers" width="20%" class="right">
+<h2>Manuelle Kontrollen</h2>
 <form action="/pump" method="POST">
 	<input type="submit" value="Pumpe">
 	<p>Status: __{{pump_status}}__</p>
@@ -12,6 +13,17 @@
 	<input type="submit" value="Brenner">
 	<p>Status: __{{burner_status}}__</p>
 </form>
+
+<h2>Steuerung nach Zieltemperatur</h2>
+<form action="/target_temp_control" method="POST">
+	<p>Setze eine Zieltemperatur auf die der Speicher geheizt werden soll:</p>
+	<input type="number" value="__{{target_temp}}__" name="target_temp" min="20" max="80">
+	<input type="submit" value="An / Aus">
+	<p>Status der Temperaturregelung: __{{target_temp_control_status}}__</p>
+	<p>Aktuelle Zieltemperatur: __{{target_temp}}__°C</p>
+</form>
+
+<h2>Verfügbare Temperaturen</h2>
 <p>Brenner: __{{temp_burner}}__ °C</p>
 <p>Vorlauf Brenner: __{{temp_from_burner}}__ °C</p>
 <p>Rücklauf Brenner: __{{temp_to_burner}}__ °C</p>
@@ -21,7 +33,10 @@
 <p>Speicher mitte: __{{temp_storage_mid}}__ °C</p>
 <p>Speicher unten: __{{temp_storage_bot}}__ °C</p>
 <p>Heizkreis Vorlauf: __{{temp_to_heating_circle}}__ °C</p>
+
+<h2>Links</h2>
 <p><a href="/graph.html">Aufzeichnung</a>
 <p><a href="http://www.jameco.com/Jameco/workshop/circuitnotes/raspberry_pi_circuit_note_fig2a.jpg">Pinanschlüsse Raspberry Pi 3</a></p>
+
 <h2>Legende:</h2>
 <img src="legend.svg" alt="svg-Bild der Legende für die Farben">

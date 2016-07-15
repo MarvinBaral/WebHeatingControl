@@ -260,7 +260,9 @@ var properties = { //Object
 	temp_to_heating_circle: 0,
 	temp_to_burner: 0,
 	temp_from_burner: 0,
-	temp_burner: 0
+	temp_burner: 0,
+	target_temp: 0,
+	target_temp_control_status: 0
 };
 var storage = {
 	temp_top: 0,
@@ -351,6 +353,20 @@ var main = function () {
 	//update inputs
 	updateTempCPU();
 
+	//heating control
+	if (properties.target_temp_control_status) {
+		if (properties.temp_storage_mid < properties.target_temp && properties.temp_burner < properties.target_temp) {
+			properties.burner_status = 1;
+		} else {
+			properties.burner_status = 0;
+		}
+		if (properties.temp_storage_mid < properties.temp_burner) {
+			properties.pump_status = 1;
+		} else {
+			properties.pump_status = 0;
+		}
+	}
+
 	//set outputs (hardware pins)
 	writeGPIO(pins[pinsIndex.burner], properties.burner_status);
 	writeGPIO(pins[pinsIndex.pump], properties.pump_status);
@@ -362,7 +378,7 @@ setInterval(main, 1000);
 //the normal webserver stuff
 //====================================================
 
-//app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.urlencoded({extended: false}));
 
 app.get('/', function (req, res) {
 	res.contentType('text/html');
@@ -432,6 +448,14 @@ app.all('/pump', function (req, res) {
 app.all('/burn', function (req, res) {
 	properties.burner_status = 1 - properties.burner_status;
 	console.log('burn');
+	res.redirect(303, '/');
+});
+
+app.all('/target_temp_control', function (req, res) {
+	properties.target_temp_control_status = 1 - properties.target_temp_control_status;
+	if (properties.target_temp_control_status) {
+		properties.target_temp = req.body.target_temp;
+	}	
 	res.redirect(303, '/');
 });
 
