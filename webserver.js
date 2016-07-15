@@ -259,7 +259,8 @@ var properties = { //Object
 	temp_storage_bot: 0,
 	temp_to_heating_circle: 0,
 	temp_to_burner: 0,
-	temp_from_burner: 0
+	temp_from_burner: 0,
+	temp_burner: 0
 };
 var storage = {
 	temp_top: 0,
@@ -294,7 +295,13 @@ var sensors = [ //mapping of indexes to positions
 	'',
 	'',
 	'temp_to_burner',
-	'temp_from_burner'
+	'temp_from_burner',
+	'',
+	'',
+	'',
+	'',
+	'',
+	'temp_burner'
 ];
 
 //serialPort: https://www.npmjs.com/package/serialport2
@@ -313,15 +320,17 @@ function start(port) {
 		var sData = data.toString();
 		console.log(sData);
 		var aData = sData.split(': ');
-		if (aData[0] < 9 && aData.length == 2 && !isNaN(aData[0]) && !isNaN(aData[1]) && aData[1] !== undefined) {
+		if (aData[0] < 15 && aData.length == 2 && !isNaN(aData[0]) && !isNaN(aData[1]) && aData[1] !== undefined) {
 			aData[0] = parseInt(aData[0]);
 			aData[1] = parseFloat(aData[1]).toFixed(1);
-			properties[sensors[aData[0]]] = aData[1];
-			if (aData[0] < NUM_SENSORS) {
-				var index = aData[0] + 1;
-				testArray[index].push(aData[1]);
-				if (testArray[index].length > 20) {
-					testArray[index].shift();
+			if (sensors[aData[1]] != '') {
+				properties[sensors[aData[0]]] = aData[1];
+				if (aData[0] < NUM_SENSORS) {
+					var index = aData[0] + 1;
+					testArray[index].push(aData[1]);
+					if (testArray[index].length > 20) {
+						testArray[index].shift();
+					}
 				}
 			}
 		}
