@@ -251,8 +251,8 @@ testArray[5] = new Array(arrayLength);
 var statusLED = 0;
 var properties = { //Object
 	cpu_temp: 0,
-	burner_status: 0,
-	pump_status: 0,
+	status_burner: 0,
+	status_pump_burner_cycle: 0,
 	status_mixer: 0,
 	status_valve: 0,
 	status_pump_heating_cicle: 0,
@@ -375,20 +375,20 @@ var main = function () {
 	//heating control
 	if (properties.target_temp_control_status) {
 		if (properties.temp_storage_mid < properties.target_temp && properties.temp_burner < properties.target_temp) {
-			properties.burner_status = 1;
+			properties.status_burner = 1;
 		} else {
-			properties.burner_status = 0;
+			properties.status_burner = 0;
 		}
 		if (properties.temp_storage_mid < properties.temp_burner) {
-			properties.pump_status = 1;
+			properties.status_pump_burner_cycle = 1;
 		} else {
-			properties.pump_status = 0;
+			properties.status_pump_burner_cycle = 0;
 		}
 	}
 
 	//set outputs (hardware pins)
-	writeGPIO(pins[pinsIndex.burner], properties.burner_status);
-	writeGPIO(pins[pinsIndex.pump], properties.pump_status);
+	writeGPIO(pins[pinsIndex.burner], properties.status_burner);
+	writeGPIO(pins[pinsIndex.pump], properties.status_pump_burner_cycle);
 	writeGPIO(pins[pinsIndex.pump_heating_circle], properties.status_pump_heating_circle);
 
 	toggleLED(); //to visualize activity (like heartbeat, but only for this application)
@@ -460,13 +460,13 @@ app.get('/graph.svg', function (req, res) {
 });
 
 app.all('/pump', function (req, res) {
-	properties.pump_status = 1 - properties.pump_status;
+	properties.status_pump_burner_cycle = 1 - properties.status_pump_burner_cycle;
 	console.log('pump');
 	res.redirect(303, '/');
 });
 
 app.all('/burn', function (req, res) {
-	properties.burner_status = 1 - properties.burner_status;
+	properties.status_burner = 1 - properties.status_burner;
 	console.log('burn');
 	res.redirect(303, '/');
 });
