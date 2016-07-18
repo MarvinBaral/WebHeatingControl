@@ -255,7 +255,8 @@ const CONSTANTS = {
 	FALLOUT_TEMP_SLIME: 58
 };
 var configuration = {
-	target_temp_regulation_temp_max: 55
+	target_temp_control_temp_max: CONSTANTS.FALLOUT_TEMP_SLIME - 3,
+	target_temp_control_temp_burner_offset: 3
 };
 var properties = { //Object
 	cpu_temp: 0,
@@ -380,9 +381,9 @@ var main = function () {
 	//update inputs
 	updateTempCPU();
 
-	//heating control
+	//target temp control
 	if (properties.target_temp_control_status) {
-		if (properties.temp_storage_mid < properties.target_temp && properties.temp_burner < properties.target_temp) {
+		if (properties.temp_storage_mid < properties.target_temp && properties.temp_burner < (properties.target_temp + configuration.target_temp_control_temp_burner_offset)) {
 			properties.status_burner = 1;
 		} else {
 			properties.status_burner = 0;
@@ -487,8 +488,8 @@ app.all('/target_temp_control', function (req, res) {
 	properties.target_temp_control_status = 1 - properties.target_temp_control_status;
 	if (properties.target_temp_control_status) {
 		properties.target_temp = req.body.target_temp;
-		if (properties.target_temp > configuration.target_temp_regulation_temp_max) {
-			properties.target_temp = configuration.target_temp_regulation_temp_max;
+		if (properties.target_temp > configuration.target_temp_control_temp_max) {
+			properties.target_temp = configuration.target_temp_comtrol_temp_max;
 		}
 	}	
 	res.redirect(303, '/');
