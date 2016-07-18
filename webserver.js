@@ -436,6 +436,12 @@ app.get('/*.css', function (req, res) {
 	res.sendFile(httpRootDir + filename);
 });
 
+app.get('/*.ico', function (req, res) {
+	res.contentType('image/x-icon');
+	var filename = req.path;
+	res.sendFile(httpRootDir + filename);
+});
+
 app.get('/storage.svg', function (req, res) {
 	storage.temp_top = properties.temp_storage_top;
 	storage.temp_mid = properties.temp_storage_mid;
