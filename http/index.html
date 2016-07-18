@@ -17,7 +17,7 @@
 <h2>Steuerung nach Zieltemperatur</h2>
 <form action="/target_temp_control" method="POST">
 	<p>Setze eine Zieltemperatur auf die der Speicher geheizt werden soll:</p>
-	<input type="number" value="__{{target_temp}}__" name="target_temp" min="20" max="80">
+	<input type="number" value="__{{target_temp}}__" name="target_temp" min="20" max="__{{target_temp_regulation_temp_max}}__">
 	<input type="submit" value="An / Aus">
 	<p>Status der Temperaturregelung: __{{target_temp_control_status}}__</p>
 	<p>Aktuelle Zieltemperatur: __{{target_temp}}__°C</p>

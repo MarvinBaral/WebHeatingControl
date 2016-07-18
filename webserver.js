@@ -249,6 +249,12 @@ testArray[4] = new Array(arrayLength);
 testArray[5] = new Array(arrayLength);
 
 var statusLED = 0;
+const CONSTANTS = {
+	FALLOUT_TEMP_SLIME: 58
+};
+var configuration = {
+	target_temp_regulation_temp_max: 55
+};
 var properties = { //Object
 	cpu_temp: 0,
 	status_burner: 0,
@@ -402,7 +408,9 @@ app.use(bodyParser.urlencoded({extended: false}));
 
 app.get('/', function (req, res) {
 	res.contentType('text/html');
-	res.send(fillWithVariables(assemblePage(fileIndex), properties));
+	var content = fillWithVariables(assemblePage(fileIndex), properties);
+	content = fillWithVariables(content, configuration);
+	res.send(content);
 });
 
 app.get('/dir', function (req, res) {
@@ -414,7 +422,9 @@ app.get('/dir', function (req, res) {
 
 app.get('/*.html', function (req, res) {
 	res.contentType('text/html');
-	res.send(fillWithVariables(assemblePage(httpRootDir + req.path), properties));
+	var content = fillWithVariables(assemblePage(httpRootDir + req.path), properties);
+	content = fillWithVariables(content, configuration);
+	res.send(content);
 });
 
 app.get('/*.css', function (req, res) {
@@ -475,6 +485,9 @@ app.all('/target_temp_control', function (req, res) {
 	properties.target_temp_control_status = 1 - properties.target_temp_control_status;
 	if (properties.target_temp_control_status) {
 		properties.target_temp = req.body.target_temp;
+		if (properties.target_temp > configuration.target_temp_regulation_temp_max) {
+			properties.target_temp = configuration.target_temp_regulation_temp_max;
+		}
 	}	
 	res.redirect(303, '/');
 });
