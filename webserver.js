@@ -253,6 +253,9 @@ var properties = { //Object
 	cpu_temp: 0,
 	burner_status: 0,
 	pump_status: 0,
+	status_mixer: 0,
+	status_valve: 0,
+	status_pump_heating_cicle: 0,
 	temp_outside: 0,
 	temp_storage_top: 0,
 	temp_storage_mid: 0,
@@ -282,12 +285,27 @@ var legend = {
 var pinsIndex = { //Object
 	LED: 0,
 	pump: 1,
-	burner: 2
+	burner: 2,
+	ventil_left: 3,
+	ventil_right: 4,
+	mixer_left: 5,
+	mixer_right: 6,
+	pump_heating_circle: 7
 };
+var enum_triple = {
+	mid: 0,
+	right: 1,
+	left: 2
+}
 var pins = [ //Array
 	3,
 	21,
-	20
+	20,
+	22,
+	23,
+	24,
+	25,
+	26
 ];
 var sensors = [ //mapping of indexes to positions
 	'temp_outside',
@@ -371,7 +389,8 @@ var main = function () {
 	//set outputs (hardware pins)
 	writeGPIO(pins[pinsIndex.burner], properties.burner_status);
 	writeGPIO(pins[pinsIndex.pump], properties.pump_status);
-	
+	writeGPIO(pins[pinsIndex.pump_heating_circle], properties.status_pump_heating_circle);
+
 	toggleLED(); //to visualize activity (like heartbeat, but only for this application)
 };
 setInterval(main, 1000);
