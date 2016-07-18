@@ -284,7 +284,7 @@ var legend = {
 };
 var pinsIndex = { //Object
 	LED: 0,
-	pump: 1,
+	pump_burner_circle: 1,
 	burner: 2,
 	ventil_left: 3,
 	ventil_right: 4,
@@ -388,8 +388,8 @@ var main = function () {
 
 	//set outputs (hardware pins)
 	writeGPIO(pins[pinsIndex.burner], properties.status_burner);
-	writeGPIO(pins[pinsIndex.pump], properties.status_pump_burner_cycle);
-	writeGPIO(pins[pinsIndex.pump_heating_circle], properties.status_pump_heating_circle);
+	writeGPIO(pins[pinsIndex.pump_burner_cycle], properties.status_pump_burner_cycle);
+	//writeGPIO(pins[pinsIndex.pump_heating_circle], properties.status_pump_heating_circle);
 
 	toggleLED(); //to visualize activity (like heartbeat, but only for this application)
 };
