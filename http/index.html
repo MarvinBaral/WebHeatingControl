@@ -5,13 +5,13 @@
 
 <img src="storage.svg" alt="svg-Bild des Speichers" width="20%" class="right">
 <h2>Manuelle Kontrollen</h2>
-<form action="/pump" method="POST">
+<form action="/pump_burner_circle" method="POST">
 	<input type="submit" value="Pumpe">
-	<p>Status: __{{pump_status}}__</p>
+	<p>Status: __{{status_pump_burner_circle}}__</p>
 </form>
-<form action="/burn" method="POST">
+<form action="/burner" method="POST">
 	<input type="submit" value="Brenner">
-	<p>Status: __{{burner_status}}__</p>
+	<p>Status: __{{status_burner}}__</p>
 </form>
 
 <h2>Steuerung nach Zieltemperatur</h2>

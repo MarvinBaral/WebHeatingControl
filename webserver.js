@@ -459,13 +459,13 @@ app.get('/graph.svg', function (req, res) {
 	res.send(content);
 });
 
-app.all('/pump', function (req, res) {
+app.all('/pump_burner_circle', function (req, res) {
 	properties.status_pump_burner_circle = 1 - properties.status_pump_burner_circle;
 	console.log('pump');
 	res.redirect(303, '/');
 });
 
-app.all('/burn', function (req, res) {
+app.all('/burner', function (req, res) {
 	properties.status_burner = 1 - properties.status_burner;
 	console.log('burn');
 	res.redirect(303, '/');
