@@ -252,7 +252,7 @@ var statusLED = 0;
 var properties = { //Object
 	cpu_temp: 0,
 	status_burner: 0,
-	status_pump_burner_cycle: 0,
+	status_pump_burner_circle: 0,
 	status_mixer: 0,
 	status_valve: 0,
 	status_pump_heating_cicle: 0,
@@ -380,15 +380,15 @@ var main = function () {
 			properties.status_burner = 0;
 		}
 		if (properties.temp_storage_mid < properties.temp_burner) {
-			properties.status_pump_burner_cycle = 1;
+			properties.status_pump_burner_circle = 1;
 		} else {
-			properties.status_pump_burner_cycle = 0;
+			properties.status_pump_burner_circle = 0;
 		}
 	}
 
 	//set outputs (hardware pins)
 	writeGPIO(pins[pinsIndex.burner], properties.status_burner);
-	writeGPIO(pins[pinsIndex.pump_burner_cycle], properties.status_pump_burner_cycle);
+	writeGPIO(pins[pinsIndex.pump_burner_circle], properties.status_pump_burner_circle);
 	//writeGPIO(pins[pinsIndex.pump_heating_circle], properties.status_pump_heating_circle);
 
 	toggleLED(); //to visualize activity (like heartbeat, but only for this application)
@@ -460,7 +460,7 @@ app.get('/graph.svg', function (req, res) {
 });
 
 app.all('/pump', function (req, res) {
-	properties.status_pump_burner_cycle = 1 - properties.status_pump_burner_cycle;
+	properties.status_pump_burner_circle = 1 - properties.status_pump_burner_circle;
 	console.log('pump');
 	res.redirect(303, '/');
 });
