@@ -1,5 +1,14 @@
 <script>
-        setInterval(function(){window.location.reload();},1000);
+	var graph;
+	var objDate = new Date();
+	var updateGraph = function() {
+		objDate = new Date();
+		graph.setAttribute('src', objDate + ' ' + objDate.getMilliseconds() + ' graph.svg');
+	};
+	window.onload = function() {
+		graph = document.getElementById('graph');
+	        setInterval(updateGraph, 500);
+	};
 </script>
 <a href="/">Home</a>
-<img src="graph.svg" alt="graph.svg"/>
+<img id="graph" src="graph.svg" alt="Graph for logging temperatures"/>

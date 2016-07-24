@@ -471,7 +471,7 @@ app.get('/legend.svg', function (req, res) {
 	res.send(content);
 });
 
-app.get('/graph.svg', function (req, res) {
+app.get('/*graph.svg', function (req, res) {
 	graph.drawGraph(testArray);
 	res.contentType('image/svg+xml');
 	var content = fs.readFileSync(svgGraph);
