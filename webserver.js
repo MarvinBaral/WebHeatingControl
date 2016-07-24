@@ -255,6 +255,7 @@ const CONSTANTS = {
 	FALLOUT_TEMP_SLIME: 58
 };
 var configuration = {
+	target_temp_control_temp_min: 20,
 	target_temp_control_temp_max: CONSTANTS.FALLOUT_TEMP_SLIME - 3,
 	target_temp_control_temp_burner_offset: 3
 };
@@ -274,7 +275,7 @@ var properties = { //Object
 	temp_to_burner: 0,
 	temp_from_burner: 0,
 	temp_burner: 0,
-	target_temp: 0,
+	target_temp: configuration.target_temp_control_temp_min,
 	target_temp_control_status: 0
 };
 var storage = {
