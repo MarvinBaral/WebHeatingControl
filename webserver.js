@@ -492,13 +492,18 @@ app.all('/burner', function (req, res) {
 });
 
 app.all('/target_temp_control', function (req, res) {
+	var target_temp = Number(req.body.target_temp);
 	properties.target_temp_control_status = 1 - properties.target_temp_control_status;
-	if (properties.target_temp_control_status) {
-		properties.target_temp = req.body.target_temp;
+	if (properties.target_temp_control_status && target_temp != undefined && target_temp != NaN) {
+		properties.target_temp = target_temp;
 		if (properties.target_temp > configuration.target_temp_control_temp_max) {
-			properties.target_temp = configuration.target_temp_comtrol_temp_max;
+			properties.target_temp = configuration.target_temp_control_temp_max;
+		}
+		if (properties.target_temp < configuration.target_temp_control_temp_min) {
+			properties.target_temp = configuration.target_temp_control_temp_min;
 		}
 	}	
+	console.log(properties.target_temp);
 	res.redirect(303, '/');
 });
 
