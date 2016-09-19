@@ -140,7 +140,8 @@ var graph = {
 	label_annex: "",
 	label_steps: 1,
 	circle_radius: 5,
-	init: function(pValue_min, pValue_max, pValue_steps, pLabel_steps, pLabel_annex) {
+	indexToLabel: Array(),
+	init: function(pValue_min, pValue_max, pValue_steps, pLabel_steps, pLabel_annex, pIndexToLabel) {
 		this.height = 600;
 		this.width = 1200;
 		this.pDrawingArea_margin = 10;
@@ -151,6 +152,7 @@ var graph = {
 		this.value_steps = pValue_steps;
 		this.label_annex = pLabel_annex;
 		this.label_steps = pLabel_steps;
+		this.indexToLabel = pIndexToLabel;
 	},
 	initGraph: function() {
 		const NUM_HORIZONTAL_LINES = (this.value_max - this.value_min) / this.value_steps;
@@ -174,7 +176,14 @@ var graph = {
 			}
 			graph.content += graph.svgLine(this.pDrawingArea_margin + '%', height + '%', (100 - this.pDrawingArea_margin) + '%', height + '%', cssClass);
 			label_value -= this.value_steps;
-		} 
+		}
+		var NUM_VALUE_LABELS = this.indexToLabel.length;
+		const OFFSET_VALUE_LABELS = -label_offset;
+		const HORIZ_SPACE_VALUE_LABELS = 30;
+		const START_HEIGHT = this.height * 0.5 - (NUM_VALUE_LABELS * 0.5 * HORIZ_SPACE_VALUE_LABELS);
+		for (var i = 0; i < NUM_VALUE_LABELS; i++) {
+			graph.content += graph.svgText(String(100 - this.pDrawingArea_margin + OFFSET_VALUE_LABELS) + '%', START_HEIGHT + i * HORIZ_SPACE_VALUE_LABELS, this.indexToLabel[i], 'color' + i);
+		}
 	},
 	svgLine: function(x1, y1, x2, y2, cssClass) {
 		if (cssClass === undefined) {
@@ -236,7 +245,17 @@ var graph = {
 		}
 	}	
 };
-graph.init(-10, 80, 10, 1, '°C');
+
+const indexToNameGraph = [
+	'CPU',
+	'outside',
+	'store top',
+	'store mid',
+	'store bot',
+	'to heat-c'
+];
+
+graph.init(-10, 80, 10, 1, '°C', indexToNameGraph);
 
 //global variables
 //====================================================
