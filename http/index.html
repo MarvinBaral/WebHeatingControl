@@ -1,5 +1,16 @@
 <script>
-	setInterval(function(){window.location.reload();},15000);
+	var update = function() {
+		var xhr = new XMLHttpRequest();
+                xhr.onreadystatechange = function() {
+                	if (this.readyState == 4 && this.status == 200) {
+				document.getElementsByTagName('html')[0].innerHTML = this.responseText;
+                	}
+                }
+		xhr.open('GET', '/', true);
+		xhr.send();
+	};
+  
+	setInterval(update, 1000);
 </script>
 
 <img src="storage.svg" alt="svg-Bild des Speichers" width="20%" class="right">
