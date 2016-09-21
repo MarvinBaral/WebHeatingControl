@@ -284,7 +284,7 @@ var properties = { //Object
 	status_pump_burner_circle: 0,
 	status_mixer: 0,
 	status_valve: 0,
-	status_pump_heating_cicle: 0,
+	status_pump_heating_circle: 0,
 	temp_outside: 0,
 	temp_storage_top: 0,
 	temp_storage_mid: 0,
@@ -418,7 +418,7 @@ var main = function () {
 	//set outputs (hardware pins)
 	writeGPIO(pins[pinsIndex.burner], properties.status_burner);
 	writeGPIO(pins[pinsIndex.pump_burner_circle], properties.status_pump_burner_circle);
-	//writeGPIO(pins[pinsIndex.pump_heating_circle], properties.status_pump_heating_circle);
+	writeGPIO(pins[pinsIndex.pump_heating_circle], properties.status_pump_heating_circle);
 
 	toggleLED(); //to visualize activity (like heartbeat, but only for this application)
 };
@@ -500,13 +500,19 @@ app.get('/*graph.svg', function (req, res) {
 
 app.all('/pump_burner_circle', function (req, res) {
 	properties.status_pump_burner_circle = 1 - properties.status_pump_burner_circle;
-	console.log('pump');
+	console.log('pump burner circle');
 	res.redirect(303, '/');
 });
 
 app.all('/burner', function (req, res) {
 	properties.status_burner = 1 - properties.status_burner;
 	console.log('burn');
+	res.redirect(303, '/');
+});
+
+app.all('/pump_heating_circle', function (req, res) {
+	properties.status_pump_heating_circle = 1 - properties.status_pump_heating_circle;
+	console.log('pump heating circle');
 	res.redirect(303, '/');
 });
 
