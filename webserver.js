@@ -13,7 +13,7 @@ const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
 const fs = require('fs'); //file-system
-const exec = require('shelljs').exec;
+const exec = require('child_process').exec;
 const serial = require('serialport-js');
 
 //paths
@@ -63,7 +63,6 @@ const fillWithVariables = function(string, variables) { //http://www.w3schools.c
 			match = match.replace(TEMPLATING_SIGN_BEGIN, '').replace(TEMPLATING_SIGN_END, '');
 			var matchValue = variables[match];
 			if (matchValue != undefined) {
-				console.log('replace ' + matches[i] + ' with ' + matchValue);
 				string = string.replace(matches[i], matchValue);
 			}
 		}
@@ -96,7 +95,7 @@ const updateTempCPU = function() {
 		var temp = stdout;
 		temp = temp.replace('temp=', '');
 		temp = temp.replace("'C", '');
-
+		
 		//handle the array
 		if (ctrTempCPU == -1) {
 			for (var i = 0; i < tempsCPU.length; i++) {
@@ -116,7 +115,6 @@ const updateTempCPU = function() {
 		}
 		avgTemp /= tempsCPU.length;
 		avgTemp = avgTemp.toFixed(1); //fixed number of digits after comma
-		console.log(avgTemp);
 
 		properties.cpu_temp = avgTemp;
 		testArray[0].push(avgTemp);
@@ -366,15 +364,14 @@ var sensors = [ //mapping of indexes to positions
 serial.open('/dev/ttyACM0', start, '\n');
 
 function start(port) {
-	console.log("SerialPort opened");
+	console.log("Serial Port opened");
 
 	port.on('error', function(err) {
-		console.log(err);
+		console.log('Error from Serial Port: ' + err);
 	});
  
 	port.on('data', function(data) {
 		var sData = data.toString();
-		console.log(sData);
 		var aData = sData.split(': ');
 		if (aData[0] < 15 && aData.length == 2 && !isNaN(aData[0]) && !isNaN(aData[1]) && aData[1] !== undefined) {
 			aData[0] = parseInt(aData[0]);
@@ -527,7 +524,7 @@ app.post('/pump_burner_circle', function (req, res) {
 
 app.post('/burner', function (req, res) {
 	properties.status_burner = 1 - properties.status_burner;
-	console.log('burn');
+	console.log('burner');
 	res.redirect(303, '/');
 });
 
@@ -549,7 +546,7 @@ app.post('/target_temp_control_used_water', function (req, res) {
 			properties.target_temp_used_water = configuration.target_temp_control_used_water_temp_min;
 		}
 	}	
-	console.log(properties.target_temp_used_water);
+	console.log('target temp used water: ' + properties.target_temp_used_water);
 	res.redirect(303, '/');
 });
 
@@ -565,7 +562,7 @@ app.post('/target_temp_control_heating_water', function (req, res) {
 			properties.target_temp_heating_water = configuration.target_temp_control_heating_water_temp_min;
 		}
 	}	
-	console.log(properties.target_temp_heating_water);
+	console.log('target temp heating water: ' + properties.target_temp_heating_water);
 	res.redirect(303, '/');
 });
 
