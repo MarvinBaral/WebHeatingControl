@@ -63,6 +63,7 @@ const fillWithVariables = function(string, variables) { //http://www.w3schools.c
 			match = match.replace(TEMPLATING_SIGN_BEGIN, '').replace(TEMPLATING_SIGN_END, '');
 			var matchValue = variables[match];
 			if (matchValue != undefined) {
+				console.log('replace ' + matches[i] + ' with ' + matchValue);
 				string = string.replace(matches[i], matchValue);
 			}
 		}
