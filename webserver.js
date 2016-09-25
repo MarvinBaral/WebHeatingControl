@@ -275,9 +275,12 @@ const CONSTANTS = {
 	FALLOUT_TEMP_SLIME: 58
 };
 var configuration = {
-	target_temp_control_temp_min: 20,
-	target_temp_control_temp_max: CONSTANTS.FALLOUT_TEMP_SLIME - 3,
-	target_temp_control_temp_burner_offset: 3
+	target_temp_control_used_water_temp_min: 20,
+	target_temp_control_used_water_temp_max: CONSTANTS.FALLOUT_TEMP_SLIME - 3,
+	target_temp_control_used_water_temp_burner_offset: 3,
+	target_temp_control_heating_water_temp_min: 20,
+	target_temp_control_heating_water_temp_max: CONSTANTS.FALLOUT_TEMP_SLIME - 3,
+	target_temp_control_heating_water_temp_burner_offset: 3
 };
 var properties = { //Object
 	cpu_temp: 0,
@@ -295,8 +298,10 @@ var properties = { //Object
 	temp_to_burner: 0,
 	temp_from_burner: 0,
 	temp_burner: 0,
-	target_temp: configuration.target_temp_control_temp_min,
-	target_temp_control_status: 0
+	target_temp_used_water: configuration.target_temp_control_used_water_temp_min,
+	target_temp_control_used_water_status: 0,
+	target_temp_heating_water: configuration.target_temp_control_heating_water_temp_min,
+	target_temp_control_heating_water_status: 0
 };
 var storage = {
 	temp_top: 0,
@@ -403,17 +408,30 @@ var main = function () {
 	updateTempCPU();
 
 	//target temp control
-	if (properties.target_temp_control_status) {
-		if (properties.temp_storage_mid < properties.target_temp && properties.temp_burner < (properties.target_temp + configuration.target_temp_control_temp_burner_offset)) {
+	var doNotSetLow = false;
+	if (properties.target_temp_control_used_water_status) {
+		if (properties.temp_storage_mid < properties.target_temp_used_water && properties.temp_burner < (properties.target_temp_used_water + configuration.target_temp_control_used_water_temp_burner_offset)) {
 			properties.status_burner = 1;
+			doNotSetLow = true;
 		} else {
 			properties.status_burner = 0;
 		}
-		if (properties.temp_storage_mid < properties.temp_burner) {
-			properties.status_pump_burner_circle = 1;
-		} else {
-			properties.status_pump_burner_circle = 0;
+	}
+	if (properties.target_temp_control_heating_water_status) {
+		if (properties.temp_storage_mid < properties.target_temp_heating_water && properties.temp_burner < (properties.target_temp_heating_water + configuration.target_temp_control_heating_water_temp_burner_offset)) {
+			properties.status_burner = 1;
+		} else if (!doNotSetLow) {
+			properties.status_burner = 0;
 		}
+		properties.status_pump_heating_circle = 1;
+	} else {
+		properties.status_pump_heating_circle = 0;
+	}
+
+	if (properties.temp_storage_mid < properties.temp_burner) {
+		properties.status_pump_burner_circle = 1;
+	} else {
+		properties.status_pump_burner_circle = 0;
 	}
 
 	//set outputs (hardware pins)
@@ -519,19 +537,35 @@ app.post('/pump_heating_circle', function (req, res) {
 	res.redirect(303, '/');
 });
 
-app.all('/target_temp_control', function (req, res) {
-	var target_temp = Number(req.body.target_temp);
-	properties.target_temp_control_status = 1 - properties.target_temp_control_status;
-	if (properties.target_temp_control_status && target_temp != undefined && target_temp != NaN) {
-		properties.target_temp = target_temp;
-		if (properties.target_temp > configuration.target_temp_control_temp_max) {
-			properties.target_temp = configuration.target_temp_control_temp_max;
+app.post('/target_temp_control_used_water', function (req, res) {
+	var target_temp = Number(req.body.target_temp_used_water);
+	properties.target_temp_control_used_water_status = 1 - properties.target_temp_control_used_water_status;
+	if (properties.target_temp_control_used_water_status && target_temp != undefined && target_temp != NaN) {
+		properties.target_temp_used_water = target_temp;
+		if (properties.target_temp_used_water > configuration.target_temp_control_used_water_temp_max) {
+			properties.target_temp_used_water = configuration.target_temp_control_used_water_temp_max;
 		}
-		if (properties.target_temp < configuration.target_temp_control_temp_min) {
-			properties.target_temp = configuration.target_temp_control_temp_min;
+		if (properties.target_temp_used_water < configuration.target_temp_control_used_water_temp_min) {
+			properties.target_temp_used_water = configuration.target_temp_control_used_water_temp_min;
 		}
 	}	
-	console.log(properties.target_temp);
+	console.log(properties.target_temp_used_water);
+	res.redirect(303, '/');
+});
+
+app.post('/target_temp_control_heating_water', function (req, res) {
+	var target_temp = Number(req.body.target_temp_heating_water);
+	properties.target_temp_control_heating_water_status = 1 - properties.target_temp_control_heating_water_status;
+	if (properties.target_temp_control_heating_water_status && target_temp != undefined && target_temp != NaN) {
+		properties.target_temp_heating_water = target_temp;
+		if (properties.target_temp_heating_water > configuration.target_temp_control_heating_water_temp_max) {
+			properties.target_temp_heating_water = configuration.target_temp_control_heating_water_temp_max;
+		}
+		if (properties.target_temp_heating_water < configuration.target_temp_control_heating_water_temp_min) {
+			properties.target_temp_heating_water = configuration.target_temp_control_heating_water_temp_min;
+		}
+	}	
+	console.log(properties.target_temp_heating_water);
 	res.redirect(303, '/');
 });
 
