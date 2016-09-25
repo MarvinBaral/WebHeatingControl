@@ -3,30 +3,18 @@
 		var xhr = new XMLHttpRequest();
                 xhr.onreadystatechange = function() {
                 	if (this.readyState == 4 && this.status == 200) {
-				document.getElementsByTagName('html')[0].innerHTML = this.responseText;
+				document.getElementById('manual_things').innerHTML = this.responseText;
                 	}
                 }
-		xhr.open('GET', '/', true);
+		xhr.open('GET', '/manualThings.html', true);
 		xhr.send();
 	};
-  
-	setInterval(update, 1000);
+	window.onload = function() {
+		setInterval(update, 1000);
+	}
 </script>
 
 <img src="storage.svg" alt="svg-Bild des Speichers" width="20%" class="right">
-<h2>Manuelle Kontrollen</h2>
-<form action="/burner" method="POST">
-	<input type="submit" value="Brenner">
-	<p>Status: __{{status_burner}}__</p>
-</form>
-<form action="/pump_burner_circle" method="POST">
-	<input type="submit" value="Speicherladepumpe">
-	<p>Status: __{{status_pump_burner_circle}}__</p>
-</form>
-<form action="/pump_heating_circle" method="POST">
-	<input type="submit" value="Heizkreispumpe">
-	<p>Status: __{{status_pump_heating_circle}}__</p>
-</form>
 
 
 <h2>Steuerung nach Zieltemperatur</h2>
@@ -38,17 +26,9 @@
 	<p>Aktuelle Zieltemperatur: __{{target_temp}}__°C</p>
 </form>
 
-<h2>Verfügbare Temperaturen</h2>
-<p>Brenner: __{{temp_burner}}__ °C</p>
-<p>Vorlauf Brenner: __{{temp_from_burner}}__ °C</p>
-<p>Rücklauf Brenner: __{{temp_to_burner}}__ °C</p>
-<p>CPU-Temperatur: __{{cpu_temp}}__ °C</p>
-<p>Außentemperatur: __{{temp_outside}}__ °C</p>
-<p>Speicher oben: __{{temp_storage_top}}__ °C</p>
-<p>Speicher mitte: __{{temp_storage_mid}}__ °C</p>
-<p>Speicher unten: __{{temp_storage_bot}}__ °C</p>
-<p>Heizkreis Vorlauf: __{{temp_to_heating_circle}}__ °C</p>
-<p>Heizkreis Rücklauf: __{{temp_from_heating_circle}}__ °C</p>
+<p id="manual_things">
+__{{manual_things}}__
+</p>
 
 <h2>Links</h2>
 <p><a href="/graph.html">Aufzeichnung</a>

@@ -431,7 +431,9 @@ app.use(bodyParser.urlencoded({extended: false}));
 
 app.get('/', function (req, res) {
 	res.contentType('text/html');
-	var content = fillWithVariables(assemblePage(fileIndex), properties);
+	var content = assemblePage(fileIndex);
+	content = content.replace(TEMPLATING_SIGN_BEGIN + 'manual_things' + TEMPLATING_SIGN_END, fs.readFileSync(httpRootDir + 'manualThings.html'));
+	content = fillWithVariables(content, properties);
 	content = fillWithVariables(content, configuration);
 	res.send(content);
 });
