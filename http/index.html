@@ -8,13 +8,14 @@
                 }
 		xhr.open('GET', '/manualThings.html', true);
 		xhr.send();
+		document.getElementById('storage').src = '/storage.svg?' + new Date().getTime();
 	};
 	window.onload = function() {
 		setInterval(update, 1000);
 	}
 </script>
 
-<img src="storage.svg" alt="svg-Bild des Speichers" width="20%" class="right">
+<img id="storage" src="storage.svg" alt="svg-Bild des Speichers" width="20%" class="right">
 
 <h2>Warmwasser</h2>
 <form action="/target_temp_control_used_water" method="POST">

@@ -483,7 +483,7 @@ app.get('/*.ico', function (req, res) {
 	res.sendFile(httpRootDir + filename);
 });
 
-app.get('/storage.svg', function (req, res) {
+app.get('/*storage.svg*', function (req, res) {
 	storage.temp_top = properties.temp_storage_top;
 	storage.temp_mid = properties.temp_storage_mid;
 	storage.temp_bot = properties.temp_storage_bot;
@@ -511,7 +511,7 @@ app.get('/legend.svg', function (req, res) {
 	res.send(content);
 });
 
-app.get('/*graph.svg', function (req, res) {
+app.get('/*graph.svg*', function (req, res) {
 	graph.drawGraph(testArray);
 	res.contentType('image/svg+xml');
 	var content = fs.readFileSync(svgGraph);
