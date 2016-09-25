@@ -501,19 +501,19 @@ app.get('/*graph.svg', function (req, res) {
 	res.send(content);
 });
 
-app.all('/pump_burner_circle', function (req, res) {
+app.post('/pump_burner_circle', function (req, res) {
 	properties.status_pump_burner_circle = 1 - properties.status_pump_burner_circle;
 	console.log('pump burner circle');
 	res.redirect(303, '/');
 });
 
-app.all('/burner', function (req, res) {
+app.post('/burner', function (req, res) {
 	properties.status_burner = 1 - properties.status_burner;
 	console.log('burn');
 	res.redirect(303, '/');
 });
 
-app.all('/pump_heating_circle', function (req, res) {
+app.post('/pump_heating_circle', function (req, res) {
 	properties.status_pump_heating_circle = 1 - properties.status_pump_heating_circle;
 	console.log('pump heating circle');
 	res.redirect(303, '/');
