@@ -2,10 +2,6 @@
 
 //webserver to control a heating
 
-//general
-//====================================================
-const NUM_SENSORS = 5;
-
 //modules
 //====================================================
 
@@ -251,7 +247,17 @@ const indexToNameGraph = [
 	'store top',
 	'store mid',
 	'store bot',
-	'to heat-c'
+	'to heat-c',
+	'N/A',
+	'N/A',
+	'to burner',
+	'fr burner',
+	'N/A',
+	'fr heat-c',
+	'N/A',
+	'N/A',
+	'N/A',
+	'burner'
 ];
 
 graph.init(-10, 80, 10, 1, '°C', indexToNameGraph);
@@ -259,14 +265,12 @@ graph.init(-10, 80, 10, 1, '°C', indexToNameGraph);
 //global variables
 //====================================================
 
-const arrayLength = 20;
-var testArray = new Array(6);
-testArray[0] = new Array(arrayLength);
-testArray[1] = new Array(arrayLength);
-testArray[2] = new Array(arrayLength);
-testArray[3] = new Array(arrayLength);
-testArray[4] = new Array(arrayLength);
-testArray[5] = new Array(arrayLength);
+const NUM_ELEMENTS = 16;
+const LENGTH_ARRAY = 20;
+var testArray = new Array(NUM_ELEMENTS);
+for (var i = 0; i < NUM_ELEMENTS; i++) {
+	testArray[i] = new Array(LENGTH_ARRAY);
+}
 
 var statusLED = 0;
 const CONSTANTS = {
@@ -378,12 +382,10 @@ function start(port) {
 			aData[1] = parseFloat(aData[1]).toFixed(1);
 			if (sensors[aData[1]] != '') {
 				properties[sensors[aData[0]]] = aData[1];
-				if (aData[0] < NUM_SENSORS) {
-					var index = aData[0] + 1;
-					testArray[index].push(aData[1]);
-					if (testArray[index].length > 20) {
-						testArray[index].shift();
-					}
+				var index = aData[0] + 1;
+				testArray[index].push(aData[1]);
+				if (testArray[index].length > 20) {
+					testArray[index].shift();
 				}
 			}
 		}

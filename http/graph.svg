@@ -12,24 +12,6 @@ xmlns:xlink="http://www.w3.org/1999/xlink" width="__{{width}}__" height="__{{hei
 				font-family: sans-serif;
 				font-size: 20px;
 			}
-			text.color0 {
-				fill: red;
-			}
-			text.color1 {
-				fill: yellow;
-			}
-			text.color2 {
-				fill: green;
-			}
-			text.color3 {
-				fill: purple;
-			}
-			text.color4 {
-				fill: silver;
-			}
-			text.color5 {
-				fill: black;
-			}
 			line {
 				stroke-width: 1px;
 				stroke: white;
@@ -42,45 +24,73 @@ xmlns:xlink="http://www.w3.org/1999/xlink" width="__{{width}}__" height="__{{hei
 				stroke: white;
 				stroke-width: 3px;
 			}
-			circle.color0 {
-				fill: red;
-			}
-			circle.color1 {
-				fill: yellow;
-			}
-			circle.color2 {
-				fill: green;
-			}
-			circle.color3 {
-				fill: purple;
-			}
-			circle.color4 {
-				fill: silver;
-			}
-			circle.color5 {
-				fill: black;
-			}
 			polyline {
 				stroke-width: 2px;
 				fill: none;
 			}
-			polyline.color0 {
+			.color0 {
+				fill: red;
 				stroke: red;
 			}
-			polyline.color1 {
+			.color1 {
+				fill: yellow;
 				stroke: yellow;
 			}
-			polyline.color2 {
+			.color2 {
+				fill: green;
 				stroke: green;
 			}
-			polyline.color3 {
-				stroke: purple;
+			.color3 {
+				fill: DarkViolet;
+				stroke: DarkViolat;
 			}
-			polyline.color4 {
-				stroke: silver;
+			.color4 {
+				fill: DimGray;
+				stroke: DimGray;
 			}
-			polyline.color5 {
+			.color5 {
+				fill: black;
 				stroke: black;
+			}
+			.color6 {
+				fill: DarkOrange;
+				stroke: DarkOrange;
+			}
+			.color7 {
+				fill: magenta;
+				stroke: magenta;
+			}
+			.color8 {
+				fill: YellowGreen;
+				stroke: YelloGreen;
+			}
+			.color9 {
+				fill: Silver;
+				stroke: Silver;
+			}
+			.color10 {
+				fill: Aqua;
+				stroke: Aqua;
+			}
+			.color11 {
+				fill: Purple;
+				stroke: Purple;
+			}
+			.color12 {
+				fill: Orange;
+				stroke: Orange;
+			}
+			.color13 {
+				fill: FireBrick;
+				stroke: FireBrick;
+			}
+			.color14 {
+				fill: DodgerBlue;
+				stroke: DodgerBlue;
+			}
+			.color15 {
+				fill: DarkSeaGreen;
+				stroke: DarkSeaGreen;
 			}
 		]]>
 	</style>
