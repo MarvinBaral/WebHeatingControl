@@ -7,9 +7,9 @@ h1 {
 	text-decoration: underline;
 }
 
-body div {
-	margin: 20px;
-	float: left;
+div.horizontalLine > * {
+	display: inline-block;
+	text-align: center;
 }
 
 @viewport {

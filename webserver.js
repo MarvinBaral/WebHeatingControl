@@ -59,7 +59,13 @@ const fillWithVariables = function(string, variables) { //http://www.w3schools.c
 			match = match.replace(TEMPLATING_SIGN_BEGIN, '').replace(TEMPLATING_SIGN_END, '');
 			var matchValue = variables[match];
 			if (matchValue != undefined) {
-				string = string.replace(matches[i], matchValue);
+				if (matchValue === true) {
+					string = string.replace(matches[i], 'Ein');
+				} else if (matchValue === false) {
+					string = string.replace(matches[i], 'Aus');
+				} else {
+					string = string.replace(matches[i], matchValue);
+				}
 			}
 		}
 	}
@@ -286,11 +292,11 @@ var configuration = {
 };
 var properties = { //Object
 	cpu_temp: 0,
-	status_burner: 0,
-	status_pump_burner_circle: 0,
+	status_burner: false,
+	status_pump_burner_circle: false,
 	status_mixer: 0,
 	status_valve: 0,
-	status_pump_heating_circle: 0,
+	status_pump_heating_circle: false,
 	temp_outside: 0,
 	temp_storage_top: 0,
 	temp_storage_mid: 0,
@@ -410,33 +416,33 @@ var main = function () {
 	var doNotSetLow = false;
 	if (properties.target_temp_control_used_water_status) {
 		if (properties.temp_storage_mid < properties.target_temp_used_water && properties.temp_burner < (properties.target_temp_used_water + configuration.target_temp_control_used_water_temp_burner_offset)) {
-			properties.status_burner = 1;
+			properties.status_burner = true;
 			doNotSetLow = true;
 		} else {
-			properties.status_burner = 0;
+			properties.status_burner = false;
 		}
 	}
 	if (properties.target_temp_control_heating_water_status) {
 		if (properties.temp_storage_mid < properties.target_temp_heating_water && properties.temp_burner < (properties.target_temp_heating_water + configuration.target_temp_control_heating_water_temp_burner_offset)) {
-			properties.status_burner = 1;
+			properties.status_burner = true;
 		} else if (!doNotSetLow) {
-			properties.status_burner = 0;
+			properties.status_burner = false;
 		}
-		properties.status_pump_heating_circle = 1;
+		properties.status_pump_heating_circle = true;
 	} else {
-		properties.status_pump_heating_circle = 0;
+		properties.status_pump_heating_circle = false;
 	}
 
 	if (properties.temp_storage_mid < properties.temp_burner) {
-		properties.status_pump_burner_circle = 1;
+		properties.status_pump_burner_circle = true;
 	} else {
-		properties.status_pump_burner_circle = 0;
+		properties.status_pump_burner_circle = false;
 	}
 
 	//set outputs (hardware pins)
-	writeGPIO(pins[pinsIndex.burner], properties.status_burner);
-	writeGPIO(pins[pinsIndex.pump_burner_circle], properties.status_pump_burner_circle);
-	writeGPIO(pins[pinsIndex.pump_heating_circle], properties.status_pump_heating_circle);
+	writeGPIO(pins[pinsIndex.burner], properties.status_burner ? 1 : 0);
+	writeGPIO(pins[pinsIndex.pump_burner_circle], properties.status_pump_burner_circle ? 1 : 0);
+	writeGPIO(pins[pinsIndex.pump_heating_circle], properties.status_pump_heating_circle ? 1: 0);
 
 	toggleLED(); //to visualize activity (like heartbeat, but only for this application)
 };
@@ -519,20 +525,20 @@ app.get('/*graph.svg*', function (req, res) {
 });
 
 app.post('/pump_burner_circle', function (req, res) {
-	properties.status_pump_burner_circle = 1 - properties.status_pump_burner_circle;
-	console.log('pump burner circle');
+	properties.status_pump_burner_circle = (req.body.status === 'on');
+	console.log('pump burner circle ' + req.body.status);
 	res.redirect(303, '/');
 });
 
 app.post('/burner', function (req, res) {
-	properties.status_burner = 1 - properties.status_burner;
-	console.log('burner');
+	properties.status_burner = (req.body.status === 'on');
+	console.log('burner ' + req.body.status);
 	res.redirect(303, '/');
 });
 
 app.post('/pump_heating_circle', function (req, res) {
-	properties.status_pump_heating_circle = 1 - properties.status_pump_heating_circle;
-	console.log('pump heating circle');
+	properties.status_pump_heating_circle = (req.body.status === 'on');
+	console.log('pump heating circle ' + req.body.status);
 	res.redirect(303, '/');
 });
 

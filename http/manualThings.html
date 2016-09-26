@@ -1,16 +1,49 @@
 <h2>Manuelle Kontrollen</h2>
-<form action="/burner" method="POST">
-        <input type="submit" value="Brenner">
-        <p>Status: __{{status_burner}}__</p>
-</form>
-<form action="/pump_burner_circle" method="POST">
-        <input type="submit" value="Speicherladepumpe">
-        <p>Status: __{{status_pump_burner_circle}}__</p>
-</form>
-<form action="/pump_heating_circle" method="POST">
-        <input type="submit" value="Heizkreispumpe">
-        <p>Status: __{{status_pump_heating_circle}}__</p>
-</form>
+<button onclick="
+	var buttons = document.getElementsByClassName('manual_control');
+	for (var i = 0; i < buttons.length; i++) {
+		buttons[i].disabled = false;
+	}
+">Unlock</button>
+
+<h3>Brenner</h3>
+<div class="horizontalLine">
+	<form action="/burner" method="POST">
+        	<input class="manual_control" type="submit" value="Ein" disabled>
+        	<input type="hidden" name="status" value="on">
+	</form>
+	<form action="/burner" method="POST">
+        	<input class="manual_control" type="submit" value="Aus" disabled>
+        	<input type="hidden" name="status" value="off">
+	</form>
+	<p>Status: __{{status_burner}}__</p>
+</div>
+
+<h3>Speicherladepumpe</h3>
+<div class="horizontalLine">
+	<form action="/pump_burner_circle" method="POST">
+        	<input class="manual_control" type="submit" value="Ein" disabled>
+        	<input type="hidden" name="status" value="on">
+	</form>
+	<form action="/pump_burner_circle" method="POST">
+        	<input class="manual_control" type="submit" value="Aus" disabled>
+        	<input type="hidden" name="status" value="off">
+	</form>
+	<p>Status: __{{status_pump_burner_circle}}__</p>
+</div>
+
+<h3>Heizkreispumpe</h3>
+<div class="horizontalLine">
+	<form action="/pump_heating_circle" method="POST">
+        	<input class="manual_control" type="submit" value="Ein" disabled>
+        	<input type="hidden" name="status" value="on">
+	</form>
+	<form action="/pump_heating_circle" method="POST">
+        	<input class="manual_control" type="submit" value="Aus" disabled>
+        	<input type="hidden" name="status" value="off">
+	</form>
+	<p>Status: __{{status_pump_heating_circle}}__</p>
+</div>
 
 <h2>Verfügbare Temperaturen</h2>
 <p>Brenner: __{{temp_burner}}__ °C</p>
