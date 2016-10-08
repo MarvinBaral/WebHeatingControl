@@ -307,9 +307,9 @@ var properties = { //Object
 	temp_from_burner: 0,
 	temp_burner: 0,
 	target_temp_used_water: configuration.target_temp_control_used_water_temp_min,
-	target_temp_control_used_water_status: 0,
+	target_temp_control_used_water_status: false,
 	target_temp_heating_water: configuration.target_temp_control_heating_water_temp_min,
-	target_temp_control_heating_water_status: 0
+	target_temp_control_heating_water_status: false
 };
 var storage = {
 	temp_top: 0,
@@ -543,34 +543,44 @@ app.post('/pump_heating_circle', function (req, res) {
 });
 
 app.post('/target_temp_control_used_water', function (req, res) {
-	var target_temp = Number(req.body.target_temp_used_water);
-	properties.target_temp_control_used_water_status = 1 - properties.target_temp_control_used_water_status;
-	if (properties.target_temp_control_used_water_status && target_temp != undefined && target_temp != NaN) {
-		properties.target_temp_used_water = target_temp;
-		if (properties.target_temp_used_water > configuration.target_temp_control_used_water_temp_max) {
-			properties.target_temp_used_water = configuration.target_temp_control_used_water_temp_max;
-		}
-		if (properties.target_temp_used_water < configuration.target_temp_control_used_water_temp_min) {
-			properties.target_temp_used_water = configuration.target_temp_control_used_water_temp_min;
-		}
-	}	
-	console.log('target temp used water: ' + properties.target_temp_used_water);
+	properties.target_temp_control_used_water_status = (req.body.status === 'on');
+	if (properties.target_temp_control_used_water_status) {
+		var target_temp = Number(req.body.target_temp_used_water);
+		if (properties.target_temp_control_used_water_status && target_temp != undefined && target_temp != NaN) {
+			properties.target_temp_used_water = target_temp;
+			if (properties.target_temp_used_water > configuration.target_temp_control_used_water_temp_max) {
+				properties.target_temp_used_water = configuration.target_temp_control_used_water_temp_max;
+			}
+			if (properties.target_temp_used_water < configuration.target_temp_control_used_water_temp_min) {
+				properties.target_temp_used_water = configuration.target_temp_control_used_water_temp_min;
+			}
+		}	
+		console.log('target temp control for used water started: ' + properties.target_temp_used_water);
+	} else {
+		properties.status_burner = false;
+		console.log('target temp control for used water stopped');
+	}
 	res.redirect(303, '/');
 });
 
 app.post('/target_temp_control_heating_water', function (req, res) {
-	var target_temp = Number(req.body.target_temp_heating_water);
-	properties.target_temp_control_heating_water_status = 1 - properties.target_temp_control_heating_water_status;
-	if (properties.target_temp_control_heating_water_status && target_temp != undefined && target_temp != NaN) {
-		properties.target_temp_heating_water = target_temp;
-		if (properties.target_temp_heating_water > configuration.target_temp_control_heating_water_temp_max) {
-			properties.target_temp_heating_water = configuration.target_temp_control_heating_water_temp_max;
+	properties.target_temp_control_heating_water_status = (req.body.status === 'on');
+	if (properties.target_temp_control_heating_water_status) {
+		var target_temp = Number(req.body.target_temp_heating_water);
+		if (properties.target_temp_control_heating_water_status && target_temp != undefined && target_temp != NaN) {
+			properties.target_temp_heating_water = target_temp;
+			if (properties.target_temp_heating_water > configuration.target_temp_control_heating_water_temp_max) {
+				properties.target_temp_heating_water = configuration.target_temp_control_heating_water_temp_max;
+			}
+			if (properties.target_temp_heating_water < configuration.target_temp_control_heating_water_temp_min) {
+				properties.target_temp_heating_water = configuration.target_temp_control_heating_water_temp_min;
+			}
 		}
-		if (properties.target_temp_heating_water < configuration.target_temp_control_heating_water_temp_min) {
-			properties.target_temp_heating_water = configuration.target_temp_control_heating_water_temp_min;
-		}
-	}	
-	console.log('target temp heating water: ' + properties.target_temp_heating_water);
+		console.log('target temp control for heating water started: ' + properties.target_temp_used_water);
+	} else {
+		properties.status_burner = false;
+		console.log('target temp control for heating water stopped');
+	}
 	res.redirect(303, '/');
 });
 
