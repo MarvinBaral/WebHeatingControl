@@ -42,7 +42,7 @@ xmlns:xlink="http://www.w3.org/1999/xlink" width="__{{width}}__" height="__{{hei
 			}
 			.color3 {
 				fill: DarkViolet;
-				stroke: DarkViolat;
+				stroke: DarkViolet;
 			}
 			.color4 {
 				fill: DimGray;
@@ -57,8 +57,8 @@ xmlns:xlink="http://www.w3.org/1999/xlink" width="__{{width}}__" height="__{{hei
 				stroke: DarkOrange;
 			}
 			.color7 {
-				fill: magenta;
-				stroke: magenta;
+				fill: Magenta;
+				stroke: Magenta;
 			}
 			.color8 {
 				fill: YellowGreen;
