@@ -294,8 +294,8 @@ var properties = { //Object
 	cpu_temp: 0,
 	status_burner: false,
 	status_pump_burner_circle: false,
-	status_mixer: 0,
-	status_valve: 0,
+	status_mixer: enum_triple.off,
+	status_valve: enum_triple.mid,
 	status_pump_heating_circle: false,
 	temp_outside: 0,
 	temp_storage_top: 0,
@@ -336,10 +336,11 @@ var pinsIndex = { //Object
 	pump_heating_circle: 7
 };
 var enum_triple = {
+	off: 0,
 	mid: 0,
 	right: 1,
 	left: 2
-}
+};
 var pins = [ //Array
 	3,
 	21,
