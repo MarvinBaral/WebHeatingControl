@@ -278,6 +278,13 @@ for (var i = 0; i < NUM_ELEMENTS; i++) {
 	testArray[i] = new Array(LENGTH_ARRAY);
 }
 
+const enum_triple = {
+	off: 0,
+	mid: 0,
+	right: 1,
+	left: 2
+};
+
 var statusLED = 0;
 const CONSTANTS = {
 	FALLOUT_TEMP_SLIME: 58
@@ -325,7 +332,7 @@ var legend = {
 	rgb_min: "255, 255, 255",
 	rgb_max: "255, 255, 255"
 };
-var pinsIndex = { //Object
+const pinsIndex = { //Object
 	LED: 0,
 	pump_burner_circle: 1,
 	burner: 2,
@@ -335,13 +342,7 @@ var pinsIndex = { //Object
 	mixer_right: 6,
 	pump_heating_circle: 7
 };
-var enum_triple = {
-	off: 0,
-	mid: 0,
-	right: 1,
-	left: 2
-};
-var pins = [ //Array
+const pins = [ //Array
 	3,
 	21,
 	20,
@@ -351,7 +352,7 @@ var pins = [ //Array
 	25,
 	26
 ];
-var sensors = [ //mapping of indexes to positions
+const sensors = [ //mapping of indexes to positions
 	'temp_outside',
 	'temp_storage_top',
 	'temp_storage_mid',
@@ -409,6 +410,27 @@ for (i = 0; i < pins.length; i++) {
 //the temperature regulation
 //====================================================
 
+var setThreestateHardwareSavely = function(gpio0, gpio1, value) {
+	//just don't cause a shortcut.
+	switch (value) {
+		case 0:
+			writeGPIO(gpio0, 0);
+			writeGPIO(gpio1, 0);
+			break;
+		case 1:
+			writeGPIO(gpio1, 0);
+			writeGPIO(gpio0, 1);
+			break;
+		case 2:
+			writeGPIO(gpio0, 0);
+			writeGPIO(gpio1, 1);
+			break;
+		default:
+			client.log('Wrong value for threestate-hardware');
+			break;				
+	}
+};
+
 var main = function () {
 	//update inputs
 	updateTempCPU();
@@ -441,6 +463,7 @@ var main = function () {
 	}
 
 	//set outputs (hardware pins)
+	setThreestateHardwareSavely(pins[pinsIndex.mixer_right], pins[pinsIndex.mixer_left], properties.status_mixer);
 	writeGPIO(pins[pinsIndex.burner], properties.status_burner ? 1 : 0);
 	writeGPIO(pins[pinsIndex.pump_burner_circle], properties.status_pump_burner_circle ? 1 : 0);
 	writeGPIO(pins[pinsIndex.pump_heating_circle], properties.status_pump_heating_circle ? 1: 0);
@@ -540,6 +563,17 @@ app.post('/burner', function (req, res) {
 app.post('/pump_heating_circle', function (req, res) {
 	properties.status_pump_heating_circle = (req.body.status === 'on');
 	console.log('pump heating circle ' + req.body.status);
+	res.redirect(303, '/');
+});
+
+app.post('/mixer', function (req, res) {
+	var num_status = Number(req.body.status);
+	if (num_status <= 2) {
+		properties.status_mixer = num_status; 
+		console.log('mixer ' + req.body.status);
+	} else {
+		console.log('Error: wrong input for mixer status');
+	}
 	res.redirect(303, '/');
 });
 
