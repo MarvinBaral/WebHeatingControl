@@ -48,15 +48,15 @@
 <h3>Mixer</h3>
 <div class="horizontalLine">
 	<form action="/mixer" method="POST">
-        	<input class="manual_control" type="submit" value="Aus - 0">
+        	<input class="manual_control" type="submit" value="Aus - 0" disabled>
         	<input type="hidden" name="status" value="0">
 	</form>
 	<form action="/mixer" method="POST">
-        	<input class="manual_control" type="submit" value="Rechts - 1">
+        	<input class="manual_control" type="submit" value="Rechts - 1" disabled>
         	<input type="hidden" name="status" value="1">
 	</form>
 	<form action="/mixer" method="POST">
-        	<input class="manual_control" type="submit" value="Links - 2">
+        	<input class="manual_control" type="submit" value="Links - 2" disabled>
         	<input type="hidden" name="status" value="2">
 	</form>
 	<p>Status: __{{status_mixer}}__</p>

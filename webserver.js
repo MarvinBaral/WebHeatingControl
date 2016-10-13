@@ -295,7 +295,9 @@ var configuration = {
 	target_temp_control_used_water_temp_burner_offset: 3,
 	target_temp_control_heating_water_temp_min: 20,
 	target_temp_control_heating_water_temp_max: CONSTANTS.FALLOUT_TEMP_SLIME - 3,
-	target_temp_control_heating_water_temp_burner_offset: 3
+	target_temp_control_heating_water_temp_burner_offset: 3,
+	target_temp_heating_water_to_heaters: 35,
+	target_temp_heating_water_to_heaters_offset: 2
 };
 var properties = { //Object
 	cpu_temp: 0,
@@ -316,6 +318,7 @@ var properties = { //Object
 	target_temp_used_water: configuration.target_temp_control_used_water_temp_min,
 	target_temp_control_used_water_status: false,
 	target_temp_heating_water: configuration.target_temp_control_heating_water_temp_min,
+	target_temp_heating_water_to_heaters: configuration.target_temp_heating_water_to_heaters,
 	target_temp_control_heating_water_status: false
 };
 var storage = {
@@ -452,7 +455,16 @@ var main = function () {
 			properties.status_burner = false;
 		}
 		properties.status_pump_heating_circle = true;
+		if (properties.temp_to_heating_circle > properties.target_temp_heating_water_to_heaters + configuration.target_temp_heating_water_to_heaters_offset) {
+			properties.status_mixer = enum_triple.left //take more from backflow of heating circle - cool
+		} else if (properties.temp_to_heating_circle < properties.target_temp_heating_water_to_heaters - configuration.target_temp_heating_water_to_heaters_offset) {
+			properties.status_mixer = enum_triple.right //take more from storage - heat
+		} else {
+			//mixer is in perfect position, let him there
+			properties.status_mixer = enum_triple.off;
+		}
 	} else {
+		properties.status_mixer = enum_triple.off;
 		properties.status_pump_heating_circle = false;
 	}
 
@@ -611,6 +623,7 @@ app.post('/target_temp_control_heating_water', function (req, res) {
 				properties.target_temp_heating_water = configuration.target_temp_control_heating_water_temp_min;
 			}
 		}
+		properties.target_temp_heating_water_to_heaters = properties.target_temp_heating_water;
 		console.log('target temp control for heating water started: ' + properties.target_temp_used_water);
 	} else {
 		properties.status_burner = false;
