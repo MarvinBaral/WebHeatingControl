@@ -354,8 +354,8 @@ const pins = [ //Array
 ];
 const sensors = [ //mapping of indexes to positions
 	'temp_outside',
-	'temp_storage_top',
 	'temp_storage_mid',
+	'temp_storage_top',
 	'temp_storage_bot',
 	'temp_to_heating_circle',
 	'',
