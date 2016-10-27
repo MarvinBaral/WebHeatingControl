@@ -441,7 +441,7 @@ var main = function () {
 	//target temp control
 	var doNotSetLow = false;
 	if (properties.target_temp_control_used_water_status) {
-		if (properties.temp_storage_top < properties.target_temp_used_water - configuration.target_temp_control_used_water_temp_burner_offset  && properties.temp_burner < (properties.target_temp_used_water + configuration.target_temp_control_used_water_temp_burner_offset)) {
+		if (properties.temp_storage_top <= properties.target_temp_used_water - configuration.target_temp_control_used_water_temp_burner_offset) {
 			properties.status_burner = true;
 			doNotSetLow = true;
 		} else {
@@ -449,7 +449,7 @@ var main = function () {
 		}
 	}
 	if (properties.target_temp_control_heating_water_status) {
-		if (properties.temp_storage_mid < properties.target_temp_heating_water - configuration.target_temp_control_used_water_temp_burner_offset && properties.temp_burner < (properties.target_temp_heating_water + configuration.target_temp_control_heating_water_temp_burner_offset)) {
+		if (properties.temp_storage_mid <= properties.target_temp_heating_water - configuration.target_temp_control_heating_water_temp_burner_offset) {
 			properties.status_burner = true;
 		} else if (!doNotSetLow) {
 			properties.status_burner = false;
