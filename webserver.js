@@ -434,14 +434,17 @@ var setThreestateHardwareSavely = function(gpio0, gpio1, value) {
 	}
 };
 
-var main = function () {
-	//update inputs
+//main control area
+var updateInputs = function() {
 	updateTempCPU();
+};
+setInterval(updateInputs, 1000);
 
+var checkAndControlBurner = function () {
 	//target temp control
 	var doNotSetLow = false;
 	if (properties.target_temp_control_used_water_status) {
-		if (properties.temp_storage_top <= properties.target_temp_used_water - configuration.target_temp_control_used_water_temp_burner_offset) {
+		if (properties.temp_storage_top < properties.target_temp_used_water) {
 			properties.status_burner = true;
 			doNotSetLow = true;
 		} else {
@@ -449,12 +452,35 @@ var main = function () {
 		}
 	}
 	if (properties.target_temp_control_heating_water_status) {
-		if (properties.temp_storage_mid <= properties.target_temp_heating_water - configuration.target_temp_control_heating_water_temp_burner_offset) {
+		if (properties.temp_storage_mid < properties.target_temp_heating_water) {
 			properties.status_burner = true;
 		} else if (!doNotSetLow) {
 			properties.status_burner = false;
 		}
-		properties.status_pump_heating_circle = true;
+	}
+	toggleLED(); //to visualize activity (like heartbeat, but only for this application, placed at most important part of the system)
+	writeGPIO(pins[pinsIndex.burner], properties.status_burner ? 1 : 0);
+};
+setInterval(checkAndControlBurner, 120000); //2min
+
+var checkAndControlPumpBurnerCircle = function() {
+	if (properties.temp_storage_mid < properties.temp_burner) {
+		properties.status_pump_burner_circle = true;
+	} else {
+		properties.status_pump_burner_circle = false;
+	}
+	writeGPIO(pins[pinsIndex.pump_burner_circle], properties.status_pump_burner_circle ? 1 : 0);
+};
+setInterval(checkAndControlPumpBurnerCircle, 1000);
+
+var checkAndControlPumpHeatingCircle = function () {
+	properties.status_pump_heating_circle = properties.target_temp_control_heating_water_status;
+	writeGPIO(pins[pinsIndex.pump_heating_circle], properties.status_pump_heating_circle ? 1: 0);
+};
+setInterval(checkAndControlPumpHeatingCircle, 1000);
+
+var checkAndControlMixer = function() {
+	if (properties.target_temp_control_heating_water_status) {
 		if (properties.temp_to_heating_circle > properties.target_temp_heating_water_to_heaters + configuration.target_temp_heating_water_to_heaters_offset) {
 			properties.status_mixer = enum_triple.left //take more from backflow of heating circle - cool
 		} else if (properties.temp_to_heating_circle < properties.target_temp_heating_water_to_heaters - configuration.target_temp_heating_water_to_heaters_offset) {
@@ -465,24 +491,15 @@ var main = function () {
 		}
 	} else {
 		properties.status_mixer = enum_triple.off;
-		properties.status_pump_heating_circle = false;
 	}
-
-	if (properties.temp_storage_mid < properties.temp_burner) {
-		properties.status_pump_burner_circle = true;
-	} else {
-		properties.status_pump_burner_circle = false;
-	}
-
-	//set outputs (hardware pins)
 	setThreestateHardwareSavely(pins[pinsIndex.mixer_right], pins[pinsIndex.mixer_left], properties.status_mixer);
-	writeGPIO(pins[pinsIndex.burner], properties.status_burner ? 1 : 0);
-	writeGPIO(pins[pinsIndex.pump_burner_circle], properties.status_pump_burner_circle ? 1 : 0);
-	writeGPIO(pins[pinsIndex.pump_heating_circle], properties.status_pump_heating_circle ? 1: 0);
-
-	toggleLED(); //to visualize activity (like heartbeat, but only for this application)
 };
-setInterval(main, 1000);
+setInterval(checkAndControlMixer, 3000); //TODO: make it stepwise
+
+//==========================================================================================
+
+
+};
 
 //the normal webserver stuff
 //====================================================
