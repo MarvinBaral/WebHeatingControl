@@ -619,9 +619,12 @@ app.post('/target_temp_control_used_water', function (req, res) {
 				properties.target_temp_used_water = configuration.target_temp_control_used_water_temp_min;
 			}
 		}	
+		if (properties.temp_storage_top < properties.target_temp_used_water) {
+			properties.status_burner = true;
+			writeGPIO(pins[pinsIndex.burner], properties.status_burner ? 1 : 0);
+		}
 		console.log('target temp control for used water started: ' + properties.target_temp_used_water);
 	} else {
-		properties.status_burner = false;
 		console.log('target temp control for used water stopped');
 	}
 	res.redirect(303, '/');
@@ -641,9 +644,12 @@ app.post('/target_temp_control_heating_water', function (req, res) {
 			}
 		}
 		properties.target_temp_heating_water_to_heaters = properties.target_temp_heating_water;
-		console.log('target temp control for heating water started: ' + properties.target_temp_used_water);
+		if (properties.temp_storage_mid < properties.target_temp_heating_water) {
+			properties.status_burner = true;
+			writeGPIO(pins[pinsIndex.burner], properties.status_burner ? 1 : 0);
+		}
+		console.log('target temp control for heating water started: ' + properties.target_temp_heating_water);
 	} else {
-		properties.status_burner = false;
 		console.log('target temp control for heating water stopped');
 	}
 	res.redirect(303, '/');
