@@ -496,10 +496,6 @@ var checkAndControlMixer = function() {
 };
 setInterval(checkAndControlMixer, 3000); //TODO: make it stepwise
 
-//==========================================================================================
-
-
-};
 
 //the normal webserver stuff
 //====================================================
