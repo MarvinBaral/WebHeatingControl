@@ -10,8 +10,12 @@
 		xhr.send();
 		document.getElementById('storage').src = '/' + new Date().getTime() + 'storage.svg';
 	};
+	var f5 = function () {
+		location.reload(true); //force real new page request from server 
+	}
 	window.onload = function() {
 		setInterval(update, 1000);
+		setInterval(f5, 10000); //sadly, this is currently needed to keep status of temperature controls up to date
 	}
 </script>
 
