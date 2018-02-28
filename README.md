@@ -1,4 +1,4 @@
-# HeatingControl-Webinterface
+# njsWebHeatingControl
 Author: Marvin Baral (github@marvinbaral.de)
 
 A node.js server on a embedded device (Raspberry Pi 3 on Arch Linux here) to control heating elemts like gas-burner or pumps and display temperature of certain elements alltogether on a cental webinterface through .svg - images with color -to-temperature mapping. A graph of all temperatures is also included here (also .svg).
@@ -25,5 +25,5 @@ The file "heating.service" has to be edited and placed in /etc/systemd/system/ .
 * Chromium
 * ...
 
-Basically every Browser supporting Java-Script and .svg - Images (-> not Internet Explorer)
+Basically every Browser supporting Java-Script and SVG-Images with CSS-classes (-> not Internet Explorer)
 
