@@ -8,7 +8,7 @@
                 }
 		xhr.open('GET', '/manualThings.html', true);
 		xhr.send();
-		document.getElementById('storage').src = '/storage.svg?' + new Date().getTime();
+		document.getElementById('storage').src = '/' + new Date().getTime() + 'storage.svg';
 	};
 	window.onload = function() {
 		setInterval(update, 1000);

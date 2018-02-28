@@ -538,7 +538,7 @@ app.get('/*.ico', function (req, res) {
 	res.sendFile(httpRootDir + filename);
 });
 
-app.get('/*storage.svg*', function (req, res) {
+app.get('/*storage.svg', function (req, res) {
 	storage.temp_top = properties.temp_storage_top;
 	storage.temp_mid = properties.temp_storage_mid;
 	storage.temp_bot = properties.temp_storage_bot;
