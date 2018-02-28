@@ -49,6 +49,11 @@
 	<p>Status der Temperaturregelung: __{{target_temp_control_heating_water_status}}__</p>
 	<p>Aktuelle Zieltemperatur: __{{target_temp_heating_water}}__°C</p>
 
+<h2>System Neustarten</h2>
+	<form action="/reboot" method="POST">
+		<input type="submit" value="Reboot System">
+	</form>
+	
 <span id="manual_things">
 __{{manual_things}}__
 </span>

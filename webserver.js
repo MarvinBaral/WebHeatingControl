@@ -92,6 +92,7 @@ const readGPIO = function(gpio) {
 };
 var tempsCPU = Array(20);
 var ctrTempCPU = -1;
+
 const updateTempCPU = function() {
 	exec('/opt/vc/bin/vcgencmd measure_temp', function (error, stdout, stderr) {
 		var temp = stdout;
@@ -648,6 +649,12 @@ app.post('/target_temp_control_heating_water', function (req, res) {
 	} else {
 		console.log('target temp control for heating water stopped');
 	}
+	res.redirect(303, '/');
+});
+
+app.post('/reboot', function (req, res) {
+	console.log('rebooting');
+	exec('reboot');
 	res.redirect(303, '/');
 });
 
