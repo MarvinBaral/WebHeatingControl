@@ -316,9 +316,9 @@ var properties = { //Object
 	temp_to_burner: 0,
 	temp_from_burner: 0,
 	temp_burner: 0,
-	target_temp_used_water: configuration.target_temp_control_used_water_temp_min,
-	target_temp_control_used_water_status: false,
-	target_temp_heating_water: configuration.target_temp_control_heating_water_temp_min,
+	target_temp_used_water: 50,
+	target_temp_control_used_water_status: true,
+	target_temp_heating_water: 50,
 	target_temp_heating_water_to_heaters: configuration.target_temp_heating_water_to_heaters,
 	target_temp_control_heating_water_status: false
 };
