@@ -1,19 +1,13 @@
 <h2>Manuelle Kontrollen</h2>
-<button onclick="
-	var buttons = document.getElementsByClassName('manual_control');
-	for (var i = 0; i < buttons.length; i++) {
-		buttons[i].disabled = false;
-	}
-">Unlock</button>
 
 <h3>Brenner</h3>
 <div class="horizontalLine">
 	<form action="/burner" method="POST">
-        	<input class="manual_control" type="submit" value="Ein" disabled>
+        	<input class="manual_control" type="submit" value="Ein" enabled>
         	<input type="hidden" name="status" value="on">
 	</form>
 	<form action="/burner" method="POST">
-        	<input class="manual_control" type="submit" value="Aus" disabled>
+        	<input class="manual_control" type="submit" value="Aus" enabled>
         	<input type="hidden" name="status" value="off">
 	</form>
 	<p>Status: __{{status_burner}}__</p>
@@ -22,11 +16,11 @@
 <h3>Speicherladepumpe</h3>
 <div class="horizontalLine">
 	<form action="/pump_burner_circle" method="POST">
-        	<input class="manual_control" type="submit" value="Ein" disabled>
+        	<input class="manual_control" type="submit" value="Ein" enabled>
         	<input type="hidden" name="status" value="on">
 	</form>
 	<form action="/pump_burner_circle" method="POST">
-        	<input class="manual_control" type="submit" value="Aus" disabled>
+        	<input class="manual_control" type="submit" value="Aus" enabled>
         	<input type="hidden" name="status" value="off">
 	</form>
 	<p>Status: __{{status_pump_burner_circle}}__</p>
@@ -35,11 +29,11 @@
 <h3>Heizkreispumpe</h3>
 <div class="horizontalLine">
 	<form action="/pump_heating_circle" method="POST">
-        	<input class="manual_control" type="submit" value="Ein" disabled>
+        	<input class="manual_control" type="submit" value="Ein" enabled>
         	<input type="hidden" name="status" value="on">
 	</form>
 	<form action="/pump_heating_circle" method="POST">
-        	<input class="manual_control" type="submit" value="Aus" disabled>
+        	<input class="manual_control" type="submit" value="Aus" enabled>
         	<input type="hidden" name="status" value="off">
 	</form>
 	<p>Status: __{{status_pump_heating_circle}}__</p>
@@ -48,15 +42,15 @@
 <h3>Mixer</h3>
 <div class="horizontalLine">
 	<form action="/mixer" method="POST">
-        	<input class="manual_control" type="submit" value="Aus - 0" disabled>
+        	<input class="manual_control" type="submit" value="Aus - 0" enabled>
         	<input type="hidden" name="status" value="0">
 	</form>
 	<form action="/mixer" method="POST">
-        	<input class="manual_control" type="submit" value="Rechts - 1" disabled>
+        	<input class="manual_control" type="submit" value="Rechts - 1" enabled>
         	<input type="hidden" name="status" value="1">
 	</form>
 	<form action="/mixer" method="POST">
-        	<input class="manual_control" type="submit" value="Links - 2" disabled>
+        	<input class="manual_control" type="submit" value="Links - 2" enabled>
         	<input type="hidden" name="status" value="2">
 	</form>
 	<p>Status: __{{status_mixer}}__</p>
