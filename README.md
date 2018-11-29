@@ -14,11 +14,6 @@ Legend:
 ![](https://www.marvinbaral.de/image/svg+xml/Uploads/HeatingControl/legend.svg)
 ###Graph
 ![](https://www.marvinbaral.de/image/svg+xml/Uploads/HeatingControl/graph.svg)
-## Setup
-### Adapt to your reguirements
-In the current state, you have to adapt all elements and their control logik to your heating system. In future, a graphical editor is planned to make this possible for every noob.
-### Make it running
-The file "heating.service" has to be edited and placed in /etc/systemd/system/ . Furthermore it has to be sure, that this and the "webserver.js" are executable. After this, "systemctl enable heating" has to be executed to start it at every reboot.
 
 ## Supported Browsers
 * Firefox
