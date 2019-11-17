@@ -5,15 +5,16 @@ A node.js server on a embedded device (Raspberry Pi 3 on Arch Linux here) to con
 
 ## Preview
 ### Water temperature storage
-![](https://www.marvinbaral.de/image/svg+xml/Uploads/HeatingControl/storage.svg)
-![](https://www.marvinbaral.de/image/svg+xml/Uploads/HeatingControl/storage2.svg)
-![](https://www.marvinbaral.de/image/svg+xml/Uploads/HeatingControl/storage3.svg)
+
+![storage](https://user-images.githubusercontent.com/11145294/69012388-7bbc8f00-0975-11ea-8a42-d511664265e4.png)
+![storage2](https://user-images.githubusercontent.com/11145294/69012389-7bbc8f00-0975-11ea-81f2-febf61cc9da1.png)
+![storage3](https://user-images.githubusercontent.com/11145294/69012390-7c552580-0975-11ea-95cf-452bd38fc45d.png)
 
 Legend:
 
-![](https://www.marvinbaral.de/image/svg+xml/Uploads/HeatingControl/legend.svg)
-###Graph
-![](https://www.marvinbaral.de/image/svg+xml/Uploads/HeatingControl/graph.svg)
+![legend](https://user-images.githubusercontent.com/11145294/69012387-7bbc8f00-0975-11ea-8da2-cc7eef7daac0.png)
+### Graph
+![graph](https://user-images.githubusercontent.com/11145294/69012386-7bbc8f00-0975-11ea-819d-0b37cffbab52.png)
 
 ## Supported Browsers
 * Firefox
