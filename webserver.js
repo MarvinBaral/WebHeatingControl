@@ -76,16 +76,16 @@ const fillWithVariables = function(string, variables) { //http://www.w3schools.c
 //====================================================
 const toggleLED = function() {
 	statusLED = 1 - statusLED;	
-	fs.writeFileSync(fileLED, statusLED);
+	fs.writeFileSync(fileLED, String(statusLED));
 };
 const initGPIO_Async = function(pin, direction) { //direction: 'in' or 'out' 
-	fs.writeFile(dirGPIO + 'export', pin, function() {
-		fs.writeFile(dirGPIO + 'gpio' + pin + '/' + 'direction', direction, function() {
+	fs.writeFile(dirGPIO + 'export', String(pin), function() {
+		fs.writeFile(dirGPIO + 'gpio' + String(pin) + '/' + 'direction', String(direction), function() {
 		});
 	});
 };
 const writeGPIO = function(gpio, value) {
-	fs.writeFileSync(dirGPIO + 'gpio' + gpio + '/' + 'value', value);
+	fs.writeFileSync(dirGPIO + 'gpio' + gpio + '/' + 'value', String(value));
 };
 const readGPIO = function(gpio) {
 	return fs.readFileSync(dirGPIO + 'gpio' + gpio + '/' + 'value');
@@ -347,14 +347,14 @@ const pinsIndex = { //Object
 	pump_heating_circle: 7
 };
 const pins = [ //Array
-	3,
-	21,
-	20,
-	22,
-	23,
-	24,
-	25,
-	26
+	'3',
+	'21',
+	'20',
+	'22',
+	'23',
+	'24',
+	'25',
+	'26'
 ];
 const sensors = [ //mapping of indexes to positions
 	'temp_outside',
