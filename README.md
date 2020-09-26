@@ -23,3 +23,11 @@ Legend:
 
 Basically every Browser supporting Java-Script and SVG-Images with CSS-classes (-> not Internet Explorer)
 
+## Default Rpi3 GPIO mapping:
+* pump_burner_circle: 21
+* burner: 20
+* ventil_left: 22 (not implemented)
+* ventil_right: 23 (not implemented)
+* mixer_left: 24
+* mixer_right: 25
+* pump_heating_circle: 26
