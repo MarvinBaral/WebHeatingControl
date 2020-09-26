@@ -10,7 +10,7 @@ const app = express();
 const bodyParser = require('body-parser');
 const fs = require('fs'); //file-system
 const exec = require('child_process').exec;
-const serial = require('serialport-js');
+const serialjs = require('serialport-js');
 
 //paths
 //====================================================
@@ -374,19 +374,17 @@ const sensors = [ //mapping of indexes to positions
 	'temp_burner'
 ];
 
-//serialPort: https://www.npmjs.com/package/serialport2
+//serial
 //====================================================
 
-serial.open('/dev/ttyACM0', start, '\n');
-
-function start(port) {
-	console.log("Serial Port opened");
-
-	port.on('error', function(err) {
-		console.log('Error from Serial Port: ' + err);
-	});
+const serial_init = async () => {
+    const delimiter = '\n';
+    const ports = await serialjs.find();
+    if (ports.length) {
+        let port = await serialjs.open(ports[0].port, delimiter);
+	console.log("serial probably opened");
  
-	port.on('data', function(data) {
+        port.on('data', (data) => {
 		var sData = data.toString();
 		var aData = sData.split(': ');
 		if (aData[0] < 15 && aData.length == 2 && !isNaN(aData[0]) && !isNaN(aData[1]) && aData[1] !== undefined) {
@@ -395,14 +393,21 @@ function start(port) {
 			if (sensors[aData[1]] != '') {
 				properties[sensors[aData[0]]] = aData[1];
 				var index = aData[0] + 1;
+				//	console.log("Temp" + String(index) + ": " + String(aData[1]) + "°C");
 				testArray[index].push(aData[1]);
 				if (testArray[index].length > 20) {
 					testArray[index].shift();
 				}
 			}
 		}
-	});
+        });
+        port.on('error', (error) => {
+            console.error(error);
+        });
+    }
 };
+serial_init();
+
  
 //init
 //====================================================
