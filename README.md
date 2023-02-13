@@ -1,5 +1,5 @@
 # njsWebHeatingControl
-Author: Marvin Baral (github@marvinbaral.de)
+Author: Marvin Baral
 
 A node.js server on a embedded device (Raspberry Pi 3 on Arch Linux here) to control heating elemts like gas-burner or pumps and display temperature of certain elements alltogether on a cental webinterface through .svg - images with color -to-temperature mapping. A graph of all temperatures is also included here (also .svg).
 
